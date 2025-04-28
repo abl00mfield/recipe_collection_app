@@ -8,6 +8,7 @@ django = "*"
 psycopg2-binary = "*"
 cloudinary = "*"
 django-cloudinary-storage = "*"
+pillow = "*"
 
 [dev-packages]
 
