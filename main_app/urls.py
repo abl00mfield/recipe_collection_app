@@ -4,8 +4,8 @@ from . import views
 urlpatterns = [
     # User authentication
     path("signup/", views.signup, name="signup"),
-    path("signin/", views.signin_view, name="signin"),
-    path("signout/", views.signout_view, name="signout"),
+    path("signin/", views.signin, name="signin"),
+    path("signout/", views.signout, name="signout"),
     path("profile/", views.profile, name="profile"),
     # Recipe URLs
     path("recipes/", views.RecipeList.as_view(), name="recipe_list"),
