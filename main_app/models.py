@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Recipe(models.Model):
@@ -39,7 +40,9 @@ class Comment(models.Model):
 class Rating(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name="ratings")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ratings")
-    score = models.PositiveIntegerField()
+    score = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
 
     class Meta:
         unique_together = ("recipe", "user")  # each user can rate each recipe only once
