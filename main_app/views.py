@@ -1,9 +1,9 @@
 from django.shortcuts import render
-
-# Create your views here.
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+
 from django.views.generic import (
     ListView,
     DetailView,
@@ -12,22 +12,18 @@ from django.views.generic import (
     DeleteView,
 )
 from .models import Recipe, Collection, Comment, Rating
-from .forms import RecipeForm, CollectionForm, CommentForm, RatingForm, SignupForm
-
-# ------------------
-# User Authentication
-# ------------------
+from .forms import RecipeForm, CollectionForm, CommentForm, RatingForm, SignUpForm
 
 
 def signup(request):
     pass
 
 
-def login_view(request):
+def signin(request):
     pass
 
 
-def logout_view(request):
+def signout(request):
     pass
 
 
@@ -36,20 +32,20 @@ def profile(request):
     pass
 
 
-class RecipeList(ListView):
+class RecipeList(LoginRequiredMixin, ListView):
     model = Recipe
     template_name = "recipes/recipe_list.html"
     context_object_name = "recipes"
 
 
-class RecipeDetail(DetailView):
+class RecipeDetail(LoginRequiredMixin, DetailView):
     model = Recipe
     template_name = "recipes/recipe_detail.html"
     context_object_name = "recipe"
     pk_url_kwarg = "recipe_id"
 
 
-class RecipeCreate(CreateView):
+class RecipeCreate(LoginRequiredMixin, CreateView):
     model = Recipe
     form_class = RecipeForm
     template_name = "recipes/recipe_form.html"
@@ -60,21 +56,21 @@ class RecipeCreate(CreateView):
         return super().form_valid(form)
 
 
-class RecipeUpdate(UpdateView):
+class RecipeUpdate(LoginRequiredMixin, UpdateView):
     model = Recipe
     form_class = RecipeForm
     template_name = "recipes/recipe_form.html"
     pk_url_kwarg = "recipe_id"
 
 
-class RecipeDelete(DeleteView):
+class RecipeDelete(LoginRequiredMixin, DeleteView):
     model = Recipe
     template_name = "recipes/recipe_confirm_delete.html"
     success_url = "/recipes/"
     pk_url_kwarg = "recipe_id"
 
 
-class CollectionList(ListView):
+class CollectionList(LoginRequiredMixin, ListView):
     model = Collection
     template_name = "collections/collection_list.html"
     context_object_name = "collections"
@@ -83,14 +79,14 @@ class CollectionList(ListView):
         return Collection.objects.filter(user=self.request.user)
 
 
-class CollectionDetail(DetailView):
+class CollectionDetail(LoginRequiredMixin, DetailView):
     model = Collection
     template_name = "collections/collection_detail.html"
     context_object_name = "collection"
     pk_url_kwarg = "collection_id"
 
 
-class CollectionCreate(CreateView):
+class CollectionCreate(LoginRequiredMixin, CreateView):
     model = Collection
     form_class = CollectionForm
     template_name = "collections/collection_form.html"
@@ -101,14 +97,14 @@ class CollectionCreate(CreateView):
         return super().form_valid(form)
 
 
-class CollectionUpdate(UpdateView):
+class CollectionUpdate(LoginRequiredMixin, UpdateView):
     model = Collection
     form_class = CollectionForm
     template_name = "collections/collection_form.html"
     pk_url_kwarg = "collection_id"
 
 
-class CollectionDelete(DeleteView):
+class CollectionDelete(LoginRequiredMixin, DeleteView):
     model = Collection
     template_name = "collections/collection_confirm_delete.html"
     success_url = "/collections/"
