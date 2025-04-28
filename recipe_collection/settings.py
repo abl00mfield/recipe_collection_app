@@ -92,7 +92,7 @@ WSGI_APPLICATION = "recipe_collection.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.pastgresql",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": "recipes",
     }
 }
