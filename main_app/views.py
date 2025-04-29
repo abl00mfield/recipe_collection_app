@@ -58,6 +58,7 @@ class RecipeList(ListView):
     model = Recipe
     template_name = "recipes/recipe_list.html"
     context_object_name = "recipes"
+    ordering = ["-created_at"]
 
 
 class RecipeDetail(DetailView):
