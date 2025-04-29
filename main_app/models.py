@@ -3,6 +3,13 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Recipe(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -10,6 +17,7 @@ class Recipe(models.Model):
     instructions = models.TextField()
     photo = models.ImageField(upload_to="recipe_photos/", blank=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipes")
+    tags = models.ManyToManyField(Tag, blank=True, related_name="recipes")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

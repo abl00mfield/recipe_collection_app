@@ -5,6 +5,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+import re
 
 from django.views.generic import (
     ListView,
@@ -13,7 +14,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-from .models import Recipe, Collection, Comment, Rating
+from .models import Recipe, Collection, Comment, Rating, Tag
 from .forms import RecipeForm, CollectionForm, CommentForm, RatingForm, SignUpForm
 
 
@@ -53,13 +54,13 @@ def profile(request):
     pass
 
 
-class RecipeList(LoginRequiredMixin, ListView):
+class RecipeList(ListView):
     model = Recipe
     template_name = "recipes/recipe_list.html"
     context_object_name = "recipes"
 
 
-class RecipeDetail(LoginRequiredMixin, DetailView):
+class RecipeDetail(DetailView):
     model = Recipe
     template_name = "recipes/recipe_detail.html"
     context_object_name = "recipe"
@@ -74,7 +75,15 @@ class RecipeCreate(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        tag_names = form.cleaned_data.get("custom_tags", [])
+
+        for name in tag_names:
+            tag, created = Tag.objects.get_or_create(name=name)
+            self.object.tags.add(tag)
+
+        messages.success(self.request, "Recipe created successfully!")
+        return response
 
 
 class RecipeUpdate(LoginRequiredMixin, UpdateView):

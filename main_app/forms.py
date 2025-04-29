@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Recipe, Collection, Comment, Rating
+import re
 
 
 class SignUpForm(UserCreationForm):
@@ -13,9 +14,26 @@ class SignUpForm(UserCreationForm):
 
 
 class RecipeForm(forms.ModelForm):
+    custom_tags = forms.CharField(
+        max_length=255,
+        required=False,
+        help_text="Enter tags separated by spaces (e.g dessert pie chocolate)",
+    )
+
     class Meta:
         model = Recipe
         fields = ["title", "description", "ingredients", "instructions", "photo"]
+
+    def clean_custom_tags(self):
+        tag_string = self.cleaned_data.get("custom_tags", "").strip().lower()
+        raw_tags = tag_string.split()
+
+        # clean data - remove foriegn characters
+        tag_names = [
+            re.sub(r"[^a-z]", "", tag) for tag in raw_tags if re.sub(r"[^a-z]", "", tag)
+        ]
+
+        return list(set(tag_names))
 
 
 class CollectionForm(forms.ModelForm):
