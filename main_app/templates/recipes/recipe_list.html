@@ -20,6 +20,7 @@
             <div class="recipe-thumb-container">
                 <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class ="recipe-thumb">
             </div>
+            {% endif %}
 
             <p>{{ recipe.description|truncatewords:20 }}</p>
         </a>
