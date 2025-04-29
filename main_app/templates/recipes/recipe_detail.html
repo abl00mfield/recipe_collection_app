@@ -34,5 +34,11 @@
       </ul>
     {% endif %}
 
+    {% if request.user == recipe.author %}
+    <div class = "button container">
+        <a class = "btn" href="{% url 'recipe_edit' recipe.id %}">Edit</a>
+        <a class ="btn danger-btn" href="{% url 'recipe_delete' recipe.id %}">Delete</a>
+    </div>
+    {% endif %}
   </div>
 {% endblock %}

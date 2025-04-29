@@ -24,6 +24,14 @@ class RecipeForm(forms.ModelForm):
         model = Recipe
         fields = ["title", "description", "ingredients", "instructions", "photo"]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # pre fill custom tags if editing
+        if self.instance.pk:
+            exisiting_tags = self.instance.tags.values_list("name", flat=True)
+            self.fields["custom_tags"].initial = " ".join(exisiting_tags)
+
     def clean_custom_tags(self):
         tag_string = self.cleaned_data.get("custom_tags", "").strip().lower()
         raw_tags = tag_string.split()

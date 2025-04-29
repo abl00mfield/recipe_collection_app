@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -86,18 +86,43 @@ class RecipeCreate(LoginRequiredMixin, CreateView):
         return response
 
 
-class RecipeUpdate(LoginRequiredMixin, UpdateView):
+class RecipeUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Recipe
     form_class = RecipeForm
     template_name = "recipes/recipe_form.html"
     pk_url_kwarg = "recipe_id"
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user
 
-class RecipeDelete(LoginRequiredMixin, DeleteView):
+        self.object.tags.clear()
+        tag_names = form.cleaned_data.get("custom_tags", [])
+        for name in tag_names:
+            tag, created = Tag.objects.get_or_create(name=name)
+            self.object.tags.add(tag)
+
+        messages.success(self.request, "Recipe updated successfully!")
+        return super().form_valid(form)
+
+    def test_func(self):
+        recipe = self.get_object()
+        return self.request.user == recipe.author
+
+
+class RecipeDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Recipe
     template_name = "recipes/recipe_confirm_delete.html"
     success_url = "/recipes/"
     pk_url_kwarg = "recipe_id"
+
+    def test_func(self):
+        recipe = self.get_object()
+        return self.request.user == recipe.author
+
+    def delete(self, request, *args, **kwargs):
+        response = super().delete(request, *args, **kwargs)
+        messages.success(self.request, "Recipe Deleted")
+        return response
 
 
 class CollectionList(LoginRequiredMixin, ListView):

@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from cloudinary.models import CloudinaryField
+from cloudinary.uploader import destroy
+from django.urls import reverse
 
 
 class Tag(models.Model):
@@ -20,6 +22,19 @@ class Recipe(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipes")
     tags = models.ManyToManyField(Tag, blank=True, related_name="recipes")
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def get_absolute_url(self):
+        return reverse("recipe_detail", kwargs={"recipe_id": self.pk})
+
+    # delete image from cloudinary
+    def delete(self, *args, **kwargs):
+        if self.photo:
+            try:
+                destroy(self.photo.public_id)
+            except Exception as e:
+                print(f"Error deleting Cloudinary image: {e}")
+
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return self.title
