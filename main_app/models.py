@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from cloudinary.models import CloudinaryField
 
 
 class Tag(models.Model):
@@ -15,7 +16,7 @@ class Recipe(models.Model):
     description = models.TextField()
     ingredients = models.TextField()
     instructions = models.TextField()
-    photo = models.ImageField(upload_to="recipe_photos/", blank=True, null=True)
+    photo = CloudinaryField("image", blank=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipes")
     tags = models.ManyToManyField(Tag, blank=True, related_name="recipes")
     created_at = models.DateTimeField(auto_now_add=True)
