@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/recipe-detail.css' %}">
+<title>Recipe Details</title>
+{% endblock%}
+
+{% block content %}
+  <div class="recipe-detail">
+
+    <h2>{{ recipe.title }}</h2>
+    <p><strong>By:</strong> {{ recipe.author.username }}</p>
+
+    {% if recipe.photo %}
+      <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="recipe-photo">
+    {% endif %}
+
+    <h3>Description</h3>
+    <p>{{ recipe.description }}</p>
+
+    <h3>Ingredients</h3>
+    <p>{{ recipe.ingredients|linebreaks }}</p>
+
+    <h3>Instructions</h3>
+    <p>{{ recipe.instructions|linebreaks }}</p>
+
+    {% if recipe.tags.all %}
+      <h3>Tags</h3>
+      <ul class="tag-list">
+        {% for tag in recipe.tags.all %}
+          <li class="tag">{{ tag.name }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+  </div>
+{% endblock %}

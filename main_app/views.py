@@ -5,7 +5,6 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-import re
 
 from django.views.generic import (
     ListView,
