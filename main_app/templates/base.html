@@ -26,8 +26,18 @@
       {% endif %}
     </ul>
   </nav>
+  <header>
+    {% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+  </header>
 
   <main>
+    
     {% block content %}
     <!-- Page-specific content will be inserted here -->
     {% endblock %}
@@ -36,6 +46,22 @@
   <footer>
     <p>&copy; 2025 Recipe Share App</p>
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const messages = document.querySelectorAll('.messages li');
+  
+      messages.forEach((message) => {
+        setTimeout(() => {
+          message.classList.add('fade-out'); // 👈 Add the class for sliding + fading
+          setTimeout(() => {
+            message.remove();
+          }, 1000); // wait for fade/slide animation to complete
+        }, 3000); // start fade/slide after 3 seconds
+      });
+    });
+  </script>
+
 
 </body>
 
