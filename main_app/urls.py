@@ -2,9 +2,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path("", views.landing, name="landing"),
     # User authentication
     path("signup/", views.signup, name="signup"),
-    path("signin/", views.signin, name="signin"),
+    path("signin/", views.Signin.as_view(), name="signin"),
     path("signout/", views.signout, name="signout"),
     path("profile/", views.profile, name="profile"),
     # Recipe URLs

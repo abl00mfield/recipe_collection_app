@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="landing-container">
+    <h1>Welcome to Recipe Share</h1>
+    <p>Discover, create, and share your favorite recipes with the community.</p>
+    {% if not user.is_authenticated %}
+        <div class="landing-buttons">
+            <a href="{% url 'signup' %}" class="btn">Get Started</a>
+            <a href="{% url 'signin' %}" class="btn">Sign In</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,7 +1,7 @@
-from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 
 from django.views.generic import (
@@ -15,16 +15,30 @@ from .models import Recipe, Collection, Comment, Rating
 from .forms import RecipeForm, CollectionForm, CommentForm, RatingForm, SignUpForm
 
 
+def landing(request):
+    return render(request, "landing.html")
+
+
 def signup(request):
-    pass
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("recipe_list")
+    else:
+        form = SignUpForm()
+    return render(request, "registration/signup.html", {"form": form})
 
 
-def signin(request):
-    pass
+class Signin(LoginView):
+    template_name = "registration/signin.html"
+    redirect_authenticated_user = True
 
 
 def signout(request):
-    pass
+    logout(request)
+    return redirect("landing")
 
 
 @login_required
