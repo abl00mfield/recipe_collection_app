@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/recipe-list.css' %}">
+<title>{{ collection.name }}</title>
+{% endblock %}
+
+{% block content %}
+<div class="collection-detail">
+  <h2>{{ collection.name }}</h2>
+
+  {% if collection.recipes.all %}
+    <div class="recipe-list">
+      {% for recipe in collection.recipes.all %}
+        <a href="{% url 'recipe_detail' recipe.id %}" class="recipe-card">
+          <div class="recipe-thumb-container">
+            {% if recipe.photo %}
+              <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="recipe-thumb">
+            {% else %}
+              <img src="{% static 'img/default-recipe-thumb.png' %}" alt="Default image" class="recipe-thumb">
+            {% endif %}
+          </div>
+          <h4>{{ recipe.title }}</h4>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>This collection doesn't have any recipes yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

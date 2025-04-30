@@ -32,4 +32,25 @@ document.addEventListener("DOMContentLoaded", function () {
       overlay.classList.remove("hidden");
     });
   }
+
+  const selects = document.querySelectorAll(".collection-select");
+  const modal = document.getElementById("new-collection-modal");
+  const recipeInput = document.getElementById("new-collection-recipe-id");
+  const cancelBtn = document.getElementById("cancel-modal");
+
+  selects.forEach((select) => {
+    select.addEventListener("change", function () {
+      if (select.value === "__new__") {
+        modal.classList.remove("hidden");
+        recipeInput.value = select.dataset.recipeId;
+        // Reset the select so it doesn't stay on "+ New Collection"
+        select.selectedIndex = 0;
+      }
+    });
+  });
+
+  cancelBtn.addEventListener("click", () => {
+    modal.classList.add("hidden");
+    recipeInput.value = "";
+  });
 });

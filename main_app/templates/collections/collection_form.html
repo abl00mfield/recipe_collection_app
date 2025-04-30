@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
+<title>Create a Collection</title>
+{% endblock%}
+
+{% block content %}
+  <h2>Create a New Collection</h2>
+  <form method="POST" enctype="multipart/form-data" data-loading-message="Creating your collection...">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Collection</button>
+  </form>
+{% endblock %}

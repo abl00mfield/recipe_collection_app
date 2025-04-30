@@ -14,15 +14,21 @@
     {% for collection in collections%}
     <a href="{% url 'collection_detail' collection.id %}" class="collection-card">
         <h3>{{ collection.name }}</h3>
-        {% if collection.recipes.first %}
         <div class="recipe-thumb-container">
-            <img 
-            src="{{ collection.recipes.first.photo.url }}" 
-            alt="{{ collection.recipes.first.photo.title }}" 
-            class ="recipe-thumb"
-            />
-        </div>
-        {% endif%}
+            {% if collection.recipes.first and collection.recipes.first.photo %}
+              <img 
+                src="{{ collection.recipes.first.photo.url }}" 
+                alt="{{ collection.recipes.first.title }}" 
+                class="recipe-thumb"
+              />
+            {% else %}
+              <img 
+                src="{% static 'img/default_collection_bw.png' %}" 
+                alt="Default recipe image" 
+                class="recipe-thumb"
+              />
+            {% endif %}
+          </div>
     </a>
     {% endfor %}
 </div>

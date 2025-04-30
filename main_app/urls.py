@@ -47,7 +47,7 @@ urlpatterns = [
         name="collection_delete",
     ),
     path(
-        "collections/<int:collection_id>/add/<int:recipe_id>",
+        "recipes/<int:recipe_id>/add-to-collection/",
         views.collection_add_recipe,
         name="collection_add_recipe",
     ),
@@ -55,6 +55,11 @@ urlpatterns = [
         "collections/<int:collection_id>/remove/<int:recipe_id>",
         views.collection_remove_recipe,
         name="collection_remove_recipe",
+    ),
+    path(
+        "collections/create-inline/",
+        views.create_collection_inline,
+        name="collection_create_inline",
     ),
     # Comment URLS
 ]

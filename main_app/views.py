@@ -64,6 +64,18 @@ class RecipeList(ListView):
     context_object_name = "recipes"
     ordering = ["-created_at"]
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        if user.is_authenticated:
+            context["user_collections"] = Collection.objects.filter(
+                user=self.request.user
+            )
+        else:
+            context["user_collections"] = None
+        return context
+
 
 class RecipeDetail(DetailView):
     model = Recipe
@@ -215,11 +227,43 @@ class CollectionDelete(LoginRequiredMixin, DeleteView):
 
 # Custom FBV for adding/removing recipes from collections
 @login_required
-def collection_add_recipe(request, collection_id, recipe_id):
-    collection = get_object_or_404(Collection, id=collection_id, user=request.user)
+def collection_add_recipe(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
-    collection.recipes.add(recipe)
+
+    if request.method == "POST":
+        collection_id = request.POST.get("collection_id")
+        if not collection_id:
+            messages.error(request, "Please select a collection")
+            return redirect("recipe_list")
+
+        collection = get_object_or_404(Collection, id=collection_id, user=request.user)
+
+        if recipe not in collection.recipes.all():
+            collection.recipes.add(recipe)
+            messages.success(request, f'"{recipe.title}" was added to your collection.')
+        else:
+            messages.info(request, f'"{recipe.title}" is already in this collection.')
+
     return redirect("collection_detail", collection_id=collection.id)
+
+
+@login_required
+def create_collection_inline(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        recipe_id = request.POST.get("recipe_id")
+        if name:
+            collection = Collection.objects.create(name=name, user=request.user)
+            if recipe_id:
+                recipe = get_object_or_404(Recipe, id=recipe_id)
+                collection.recipes.add(recipe)
+            messages.success(request, f"Collection '{name}' created!")
+        else:
+            messages.error(request, "Collection name is required")
+    if collection:
+        return redirect("collection_detail", collection_id=collection.id)
+    else:
+        return redirect("recipe_list")
 
 
 @login_required
