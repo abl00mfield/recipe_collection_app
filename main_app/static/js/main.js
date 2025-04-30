@@ -20,4 +20,16 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     el.textContent = localString;
   });
+
+  const form = document.querySelector("form");
+  const overlay = document.getElementById("loading-overlay");
+
+  if (form && overlay) {
+    form.addEventListener("submit", () => {
+      const message =
+        form.dataset.loadingMessage || "Submitting, please wait...";
+      overlay.querySelector("p").textContent = message;
+      overlay.classList.remove("hidden");
+    });
+  }
 });
