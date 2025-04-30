@@ -57,7 +57,6 @@ urlpatterns = [
         name="collection_remove_recipe",
     ),
     # Comment URLS
-    path("recipes/<int:recipe_id>/comment/", views.add_comment, name="add_comment"),
     path(
         "comments/<int:comment_id>/delete/", views.delete_comment, name="delete_comment"
     ),

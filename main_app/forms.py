@@ -54,6 +54,12 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ["content"]
+        labels = {"content": ""}
+        widgets = {
+            "content": forms.Textarea(
+                attrs={"rows": 5, "placeholder": "Leave a comment..."}
+            )
+        }
 
 
 class RatingForm(forms.ModelForm):

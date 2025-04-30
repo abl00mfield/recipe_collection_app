@@ -66,6 +66,21 @@ class RecipeDetail(DetailView):
     context_object_name = "recipe"
     pk_url_kwarg = "recipe_id"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["comment_form"] = CommentForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = CommentForm(request.POST)
+        if form.is_valid() and request.user.is_authenticated:
+            comment = form.save(commit=False)
+            comment.recipe = self.object
+            comment.author = request.user
+            comment.save()
+        return redirect("recipe_detail", recipe_id=self.object.pk)
+
 
 class RecipeCreate(LoginRequiredMixin, CreateView):
     model = Recipe
@@ -181,22 +196,6 @@ def collection_remove_recipe(request, collection_id, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     collection.recipes.remove(recipe)
     return redirect("collection_detail", collection_id=collection.id)
-
-
-@login_required
-def add_comment(request, recipe_id):
-    recipe = get_object_or_404(Recipe, id=recipe_id)
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.author = request.user
-            comment.recipe = recipe
-            comment.save()
-            return redirect("recipe_detail", recipe_id=recipe.id)
-    else:
-        form = CommentForm()
-    return render(request, "comments/comment_form.html", {"form": form})
 
 
 @login_required

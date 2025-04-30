@@ -30,3 +30,34 @@
   border-radius: 20px;
   font-size: 0.9rem;
 }
+
+.comment-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+.comment-list li {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+}
+
+h3 {
+  margin: 1rem 0;
+}
+p {
+  margin: 1rem 0;
+}
+
+.comment-form p label {
+  display: block;
+}
+
+p textarea {
+  width: 100%;
+  padding: 1rem;
+}
+p label {
+  margin: 1rem 0;
+}
