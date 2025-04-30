@@ -6,6 +6,7 @@
   <meta charset="UTF-8">
   
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <script defer src="{% static 'js/main.js' %}"></script>
   {% block head %}
   {% endblock%}
 </head>
@@ -48,20 +49,7 @@
     <p>&copy; 2025 Recipe Share App</p>
   </footer>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const messages = document.querySelectorAll('.messages li');
   
-      messages.forEach((message) => {
-        setTimeout(() => {
-          message.classList.add('fade-out'); // 👈 Add the class for sliding + fading
-          setTimeout(() => {
-            message.remove();
-          }, 1000); // wait for fade/slide animation to complete
-        }, 3000); // start fade/slide after 3 seconds
-      });
-    });
-  </script>
 
 
 </body>

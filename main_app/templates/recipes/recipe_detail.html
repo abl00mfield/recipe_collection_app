@@ -20,10 +20,22 @@
     <p>{{ recipe.description }}</p>
 
     <h3>Ingredients</h3>
-    <p>{{ recipe.ingredients|linebreaks }}</p>
+    <ul>
+        {% for line in recipe.ingredients.splitlines %}
+          {% if line %}
+            <li>{{ line }}</li>
+          {% endif %}
+        {% endfor %}
+      </ul>
 
-    <h3>Instructions</h3>
-    <p>{{ recipe.instructions|linebreaks }}</p>
+      <h3>Instructions</h3>
+      <ol>
+        {% for step in recipe.instructions.splitlines %}
+          {% if step %}
+            <li>{{ step }}</li>
+          {% endif %}
+        {% endfor %}
+      </ol>
 
     {% if recipe.tags.all %}
       <h3>Tags</h3>
@@ -39,6 +51,32 @@
         <a class = "btn" href="{% url 'recipe_edit' recipe.id %}">Edit</a>
         <a class ="btn danger-btn" href="{% url 'recipe_delete' recipe.id %}">Delete</a>
     </div>
+    {% endif %}
+    <h3>Comments</h3>
+    {% if recipe.comments.all %}
+        <ul class="comment-list">
+            {% for comment in recipe.comments.all %}
+                <li>  
+                    <strong>{{ comment.author.username }}</strong> on
+                    <time class="utc-timestamp" datetime="{{ comment.created_at|date:"c" }}">
+                        {{ comment.created_at|date:"M d, Y g:i A" }} MT
+                    </time>                 
+                    {{ comment.content|linebreaks }}                                     
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}     
+        <p>No comments yet.</p>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        <form method="POST" class = "comment-form">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit" class="btn">Post Comment</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'signin' %}">Sign in</a> to leave a comment</p>
     {% endif %}
   </div>
 {% endblock %}
