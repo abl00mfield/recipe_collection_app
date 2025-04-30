@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Recipe, Collection, Comment, Rating
+from .models import Recipe, Collection, Feedback
 import re
 
 
@@ -50,30 +50,14 @@ class CollectionForm(forms.ModelForm):
         fields = ["name"]
 
 
-class CommentForm(forms.ModelForm):
+class FeedbackForm(forms.ModelForm):
     class Meta:
-        model = Comment
-        fields = ["content"]
-        labels = {"content": ""}
+        model = Feedback
+        fields = ["score", "comment"]
+        labels = {"comment": "", "score": "Your Rating"}
         widgets = {
-            "content": forms.Textarea(
+            "score": forms.RadioSelect(choices=[(i, str(i)) for i in range(1, 6)]),
+            "comment": forms.Textarea(
                 attrs={"rows": 5, "placeholder": "Leave a comment..."}
-            )
-        }
-
-
-class RatingForm(forms.ModelForm):
-    class Meta:
-        model = Rating
-        fields = ["score"]
-        widgets = {
-            "score": forms.Select(
-                choices=[
-                    (1, "⭐ 1 Star"),
-                    (2, "⭐⭐ 2 Stars"),
-                    (3, "⭐⭐⭐ 3 Stars"),
-                    (4, "⭐⭐⭐⭐ 4 Stars"),
-                    (5, "⭐⭐⭐⭐⭐ 5 Stars"),
-                ]
-            )
+            ),
         }

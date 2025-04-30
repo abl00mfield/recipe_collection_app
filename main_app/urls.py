@@ -57,12 +57,4 @@ urlpatterns = [
         name="collection_remove_recipe",
     ),
     # Comment URLS
-    path(
-        "comments/<int:comment_id>/delete/", views.delete_comment, name="delete_comment"
-    ),
-    path(
-        "recipes/<int:recipe_id>/rate",
-        views.add_or_update_rating,
-        name="add_or_update_rating",
-    ),
 ]

@@ -4,7 +4,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.messages.views import SuccessMessageMixin
+from django.db import models
 
 from django.views.generic import (
     ListView,
@@ -13,8 +13,13 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-from .models import Recipe, Collection, Comment, Rating, Tag
-from .forms import RecipeForm, CollectionForm, CommentForm, RatingForm, SignUpForm
+from .models import Recipe, Collection, Feedback, Tag
+from .forms import (
+    RecipeForm,
+    CollectionForm,
+    SignUpForm,
+    FeedbackForm,
+)
 
 
 def landing(request):
@@ -68,17 +73,44 @@ class RecipeDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["comment_form"] = CommentForm()
+        recipe = self.object
+        user = self.request.user
+
+        if user.is_authenticated:
+            existing_feedback = Feedback.objects.filter(
+                recipe=recipe, user=user
+            ).first()
+
+            if not existing_feedback:
+                context["feedback_form"] = FeedbackForm()
+            else:
+                context["feedback_form"] = FeedbackForm(instance=existing_feedback)
+        else:
+            context["feedback_form"] = None
+
+        context["feedbacks"] = recipe.feedbacks.select_related("user")
+        avg = recipe.feedbacks.aggregate(models.Avg("score"))["score__avg"]
+        context["average_score"] = round(avg or 0, 1)
+
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = CommentForm(request.POST)
-        if form.is_valid() and request.user.is_authenticated:
-            comment = form.save(commit=False)
-            comment.recipe = self.object
-            comment.author = request.user
-            comment.save()
+
+        if not request.user.is_authenticated:
+            return redirect("signin")
+
+        existing_feedback = Feedback.objects.filter(
+            recipe=self.object, user=request.user
+        ).first()
+        form = FeedbackForm(request.POST, instance=existing_feedback)
+
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            feedback.user = request.user
+            feedback.recipe = self.object
+            feedback.save()
+
         return redirect("recipe_detail", recipe_id=self.object.pk)
 
 
@@ -198,23 +230,23 @@ def collection_remove_recipe(request, collection_id, recipe_id):
     return redirect("collection_detail", collection_id=collection.id)
 
 
-@login_required
-def delete_comment(request, comment_id):
-    comment = get_object_or_404(Comment, id=comment_id, author=request.user)
-    recipe_id = comment.recipe.id
-    comment.delete()
-    return redirect("recipe_detail", recipe_id=recipe_id)
+# @login_required
+# def delete_comment(request, comment_id):
+#     comment = get_object_or_404(Comment, id=comment_id, author=request.user)
+#     recipe_id = comment.recipe.id
+#     comment.delete()
+#     return redirect("recipe_detail", recipe_id=recipe_id)
 
 
-@login_required
-def add_or_update_rating(request, recipe_id):
-    recipe = get_object_or_404(Recipe, id=recipe_id)
-    rating, created = Rating.objects.get_or_create(user=request.user, recipe=recipe)
-    if request.method == "POST":
-        form = RatingForm(request.POST, instance=rating)
-        if form.is_valid():
-            form.save()
-            return redirect("recipe_detail", recipe_id=recipe.id)
-    else:
-        form = RatingForm(instance=rating)
-    return render(request, "ratings/rating_form.html", {"form": form, "recipe": recipe})
+# @login_required
+# def add_or_update_rating(request, recipe_id):
+#     recipe = get_object_or_404(Recipe, id=recipe_id)
+#     rating, created = Rating.objects.get_or_create(user=request.user, recipe=recipe)
+#     if request.method == "POST":
+#         form = RatingForm(request.POST, instance=rating)
+#         if form.is_valid():
+#             form.save()
+#             return redirect("recipe_detail", recipe_id=recipe.id)
+#     else:
+#         form = RatingForm(instance=rating)
+#     return render(request, "ratings/rating_form.html", {"form": form, "recipe": recipe})

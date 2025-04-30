@@ -52,31 +52,51 @@
         <a class ="btn danger-btn" href="{% url 'recipe_delete' recipe.id %}">Delete</a>
     </div>
     {% endif %}
-    <h3>Comments</h3>
-    {% if recipe.comments.all %}
-        <ul class="comment-list">
-            {% for comment in recipe.comments.all %}
-                <li>  
-                    <strong>{{ comment.author.username }}</strong> on
-                    <time class="utc-timestamp" datetime="{{ comment.created_at|date:"c" }}">
-                        {{ comment.created_at|date:"M d, Y g:i A" }} MT
-                    </time>                 
-                    {{ comment.content|linebreaks }}                                     
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}     
-        <p>No comments yet.</p>
-    {% endif %}
-
+    <h3>Average Rating: {{ average_score }} / 5</h3>
+    
     {% if user.is_authenticated %}
-        <form method="POST" class = "comment-form">
-            {% csrf_token %}
-            {{ comment_form.as_p }}
-            <button type="submit" class="btn">Post Comment</button>
-        </form>
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="star-rating">
+            {% for i in "54321"|make_list %}
+              <input type="radio" name="score" id="star{{ i }}" value="{{ i }}"
+              {% if i|add:"0" == feedback_form.score.value %}checked{% endif %}>
+              <label for="star{{ i }}" title="{{ i }} star{{ i|pluralize }}">&#9733;</label>
+            {% endfor %}
+        </div>
+
+        <div class = "comment">
+        {{ feedback_form.comment }}
+        </div>
+
+        <button class = "btn" type="submit">Submit Feedback</button>
+    </form>
     {% else %}
-        <p><a href="{% url 'signin' %}">Sign in</a> to leave a comment</p>
+    <p><a href="{% url 'signin' %}">Sign in</a> to leave a rating and comment.</p>
+    {% endif %}
+    <h3>Reviews</h3>
+    {% if feedbacks %}
+    <ul class="feedback-list">
+        {% for f in feedbacks %}
+        <li>
+            <strong>{{ f.user.username }}</strong>
+            <span>
+            {% for star in "12345"|make_list %}
+                {% if forloop.counter <= f.score %}
+                ⭐
+                {% else %}
+                ☆
+                {% endif %}
+            {% endfor %}
+            </span><br>
+            {{ f.comment|linebreaks }}
+            <small>{{ f.created_at|date:"M d, Y g:i A" }}</small>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No reviews yet.</p>
     {% endif %}
   </div>
 {% endblock %}

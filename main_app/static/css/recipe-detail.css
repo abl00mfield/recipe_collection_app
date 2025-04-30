@@ -31,13 +31,13 @@
   font-size: 0.9rem;
 }
 
-.comment-list {
+.feedback-list {
   list-style: none;
   padding: 0;
   margin-top: 2rem;
 }
 
-.comment-list li {
+.feedback-list li {
   margin-bottom: 1.5rem;
   border-bottom: 1px solid #eee;
   padding-bottom: 1rem;
@@ -46,18 +46,36 @@
 h3 {
   margin: 1rem 0;
 }
-p {
-  margin: 1rem 0;
-}
 
-.comment-form p label {
-  display: block;
-}
-
-p textarea {
+.comment textarea {
   width: 100%;
   padding: 1rem;
 }
-p label {
-  margin: 1rem 0;
+
+.star-rating {
+  display: flex;
+  direction: rtl;
+  justify-content: flex-end;
+}
+
+.star-rating input[type="radio"] {
+  display: none;
+}
+
+.star-rating label {
+  font-size: 2rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+/* Hover effects - highlight all stars before the hovered one */
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: #f6ad55;
+}
+
+/* Checked effect - highlight all stars up to the selected one */
+.star-rating input[type="radio"]:checked ~ label {
+  color: #f6ad55;
 }
