@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/collection-list.css' %}">
+<title>Your Collections</title>
+{% endblock%}
+
+{% block content %}
+<h2>Your Collections</h2>
+
+{% if collections %}
+<div class="collection-list">
+    {% for collection in collections%}
+    <a href="{% url 'collection_detail' collection.id %}" class="collection-card">
+        <h3>{{ collection.name }}</h3>
+        {% if collection.recipes.first %}
+        <div class="recipe-thumb-container">
+            <img 
+            src="{{ collection.recipes.first.photo.url }}" 
+            alt="{{ collection.recipes.first.photo.title }}" 
+            class ="recipe-thumb"
+            />
+        </div>
+        {% endif%}
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+    <p>No collections yet. </p>
+{% endif %}
+
+{% endblock %}
+
