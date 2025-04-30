@@ -1,6 +1,6 @@
 .recipe-detail {
   max-width: 800px;
-  margin: 2rem auto;
+  margin: 1rem auto;
   padding: 2rem;
   background-color: #fff;
   border-radius: 8px;
@@ -15,6 +15,9 @@
   margin-bottom: 2rem;
 }
 
+.title {
+  text-align: center;
+}
 .tag-list {
   list-style: none;
   display: flex;
@@ -29,6 +32,7 @@
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.9rem;
+  margin: 1rem 0;
 }
 
 .feedback-list {
@@ -44,6 +48,11 @@
 }
 
 h3 {
+  margin: 1rem 0;
+}
+
+h2,
+p {
   margin: 1rem 0;
 }
 

@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from .models import Recipe, Collection, Feedback
 import re
 
@@ -22,7 +24,14 @@ class RecipeForm(forms.ModelForm):
 
     class Meta:
         model = Recipe
-        fields = ["title", "description", "ingredients", "instructions", "photo"]
+        fields = [
+            "title",
+            "source",
+            "description",
+            "ingredients",
+            "instructions",
+            "photo",
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -31,6 +40,18 @@ class RecipeForm(forms.ModelForm):
         if self.instance.pk:
             exisiting_tags = self.instance.tags.values_list("name", flat=True)
             self.fields["custom_tags"].initial = " ".join(exisiting_tags)
+
+    def clean_source(self):
+        url = self.cleaned_data.get("source")
+        if url:
+            if not url.startswith(("http://", "https://")):
+                url = "https://" + url
+            validator = URLValidator()
+            try:
+                validator(url)
+            except ValidationError:
+                raise forms.ValidationError("Please enter a valid URL")
+        return url
 
     def clean_custom_tags(self):
         tag_string = self.cleaned_data.get("custom_tags", "").strip().lower()

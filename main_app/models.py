@@ -15,6 +15,7 @@ class Tag(models.Model):
 
 class Recipe(models.Model):
     title = models.CharField(max_length=255)
+    source = models.URLField(blank=True, null=True)
     description = models.TextField()
     ingredients = models.TextField()
     instructions = models.TextField()

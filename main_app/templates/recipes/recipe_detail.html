@@ -9,8 +9,15 @@
 {% block content %}
   <div class="recipe-detail">
 
-    <h2>{{ recipe.title }}</h2>
-    <p><strong>By:</strong> {{ recipe.author.username }}</p>
+    <h2 class = "title">{{ recipe.title }}</h2>
+    <p><strong>Submitted by:</strong> {{ recipe.author.username }}</p>
+    {% if recipe.source %}
+        <p><strong>Original Source:</strong>
+            <a href="{{ recipe.source }}" target="_blank" rel="noopener noreferrer">
+                {{ recipe.source|cut:"https://"|cut:"http://" }}
+            </a>
+        </p>
+    {% endif %}
 
     {% if recipe.photo %}
       <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="recipe-photo">
