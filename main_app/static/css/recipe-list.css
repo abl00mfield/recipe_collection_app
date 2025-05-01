@@ -7,6 +7,7 @@ h3 {
 }
 p {
   padding: 0.5rem;
+  text-align: center;
 }
 
 .recipe-list {
@@ -99,7 +100,7 @@ p {
   display: none;
 }
 
-.add-icon i {
+.add-icon i.fa-solid {
   font-size: 1.2rem;
   color: black;
   transition: color 0.3s ease;

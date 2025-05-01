@@ -72,9 +72,18 @@ class RecipeList(ListView):
         context["page_title"] = "All Recipes"
 
         if user.is_authenticated:
-            context["user_collections"] = Collection.objects.filter(
-                user=self.request.user
+            user_collections = (
+                Collection.objects.filter(user=self.request.user)
+                .prefetch_related("recipes")
+                .order_by("name")
             )
+            saved_recipe_ids = set()
+
+            for collection in user_collections:
+                saved_recipe_ids.update(collection.recipes.values_list("id", flat=True))
+
+            context["user_collections"] = user_collections
+            context["saved_recipe_ids"] = saved_recipe_ids
         else:
             context["user_collections"] = None
 
@@ -94,11 +103,16 @@ class RecipeList(ListView):
         # filter by search keyword
         query = self.request.GET.get("q")
         if query:
-            queryset = queryset.filter(
-                Q(title__icontains=query)
-                | Q(description__icontains=query)
-                | Q(tags__name__icontains=query)
-            ).distinct()
+            terms = query.strip().split()
+            q_objects = Q()
+            for term in terms:
+                q_objects &= (
+                    Q(title__icontains=term)
+                    | Q(description__icontains=term)
+                    | Q(tags__name__icontains=term)
+                    | Q(ingredients__icontains=term)
+                )
+            queryset = queryset.filter(q_objects).distinct()
 
         # sort
         sort = self.request.GET.get("sort", "-created_at")
@@ -124,7 +138,20 @@ class UserRecipeList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_title"] = "My Recipes"
-        context["user_collections"] = Collection.objects.filter(user=self.request.user)
+
+        user_collections = (
+            Collection.objects.filter(user=self.request.user)
+            .prefetch_related("recipes")
+            .order_by("name")
+        )
+        saved_recipe_ids = set()
+
+        for collection in user_collections:
+            saved_recipe_ids.update(collection.recipes.values_list("id", flat=True))
+
+        context["user_collections"] = user_collections
+        context["saved_recipe_ids"] = saved_recipe_ids
+
         return context
 
 
@@ -243,7 +270,7 @@ class CollectionList(LoginRequiredMixin, ListView):
     context_object_name = "collections"
 
     def get_queryset(self):
-        return Collection.objects.filter(user=self.request.user)
+        return Collection.objects.filter(user=self.request.user).order_by("name")
 
 
 class CollectionDetail(LoginRequiredMixin, DetailView):
