@@ -171,7 +171,7 @@ class RecipeDetail(DetailView):
                 recipe=recipe, user=user
             ).first()
             context["user_collections"] = Collection.objects.filter(user=user)
-            context["collections"] = recipe.collections.all()
+            context["collections"] = recipe.collections.filter(user=user)
 
             if not existing_feedback:
                 context["feedback_form"] = FeedbackForm()
