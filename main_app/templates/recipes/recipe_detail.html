@@ -19,32 +19,52 @@
         </p>
     {% endif %}
 
-    {% if recipe.photo %}
-      <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="recipe-photo">
-    {% endif %}
-
-    {% if user.is_authenticated %}
-    <form method="POST" action="{% url 'collection_add_recipe' recipe.id %}" class="add-to-collection-form">
-        {% csrf_token %}
-        <label for="collection_id">Add to Collection:</label>
-        <select 
-            name="collection_id" 
-            id="collection_id" 
-            class="collection-select"
-            data-recipe-id="{{ recipe.id }}"
-            required>
-            <option value="" disabled selected>Select collection</option>
-            {% for collection in user_collections %}
-                <option value="{{ collection.id }}">{{ collection.name }}</option>
-            {% endfor %}
-            <option value="__new__">➕ New Collection</option>
-        </select>
-        <button type="submit" class="btn">Add</button>
-    </form>
-
-    {% else %}
-    <p><a href="{% url 'signin' %}">Sign in</a> to add this recipe to a collection.</p>
-    {% endif %}
+    <div class="photo-collection-container">
+        <div class="recipe-photo">
+        {% if recipe.photo %}
+        <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="recipe-photo">
+        {% endif %}
+        </div>
+        <div class="recipe-collection-info">
+            {% if user.is_authenticated %}
+            <div class="recipe-collections">
+                {% if recipe.collections %}
+                <h3>In Collections</h3>
+                <ul class="collection-list">
+                    {% for collection in collections %}
+                    <li>{{ collection.name }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>Not added to any collections yet!</p>
+                {% endif %}
+            </div>
+            <div class="collection-form-container">
+                <form method="POST" action="{% url 'collection_add_recipe' recipe.id %}" class="add-to-collection-form">
+                {% csrf_token %}
+                    <label for="collection_id">Add to Collection:</label>
+                    <select 
+                        name="collection_id" 
+                        id="collection_id" 
+                        class="collection-select"
+                        data-recipe-id="{{ recipe.id }}"
+                        required>
+                        <option value="" disabled selected>Select collection</option>
+                        {% for collection in user_collections %}
+                        <option value="{{ collection.id }}">{{ collection.name }}</option>
+                        {% endfor %}
+                        <option value="__new__">➕ New Collection</option>
+                    </select>
+                    <button type="submit" class="btn">Add</button>
+                </form>
+                
+            </div>
+            {% else %}
+            <p><a href="{% url 'signin' %}">Sign in</a> to add this recipe to a collection.</p>
+            {% endif %}
+        </div>
+    </div>
+    
 
     <h3>Description</h3>
     <p>{{ recipe.description }}</p>

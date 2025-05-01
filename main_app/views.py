@@ -63,6 +63,7 @@ class RecipeList(ListView):
     template_name = "recipes/recipe_list.html"
     context_object_name = "recipes"
     ordering = ["-created_at"]
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -110,6 +111,7 @@ class RecipeDetail(DetailView):
                 recipe=recipe, user=user
             ).first()
             context["user_collections"] = Collection.objects.filter(user=user)
+            context["collections"] = recipe.collections.all()
 
             if not existing_feedback:
                 context["feedback_form"] = FeedbackForm()

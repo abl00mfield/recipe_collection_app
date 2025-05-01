@@ -2,12 +2,12 @@
 {% load static %}
 
 {% block head %}
-<Title>Recipe Share</Title>
+<Title>Recipe Box</Title>
 {% endblock%}
 
 {% block content %}
 <div class="landing-container">
-    <h1>Welcome to Recipe Share</h1>
+    <h1>Welcome to Recipe Box</h1>
     <p>Discover, create, and share your favorite recipes with the community.</p>
     {% if not user.is_authenticated %}
         <div class="landing-buttons">
