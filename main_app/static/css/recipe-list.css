@@ -171,3 +171,26 @@ p {
 .pagination a:hover {
   background-color: #434190;
 }
+
+.filter-form {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.filter-form label {
+  font-weight: bold;
+}
+
+.filter-form select {
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.filter-form input[type="text"] {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}

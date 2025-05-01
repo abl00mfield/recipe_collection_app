@@ -13,6 +13,30 @@
   <h2>All Recipes</h2>
 {% endif %}
 
+<form method="get" class="filter-form">
+    <input type="text" name="q" id="q" placeholder="Searh recipes..." value = "{{ search_query }}">
+    <label for="sort">Sort by:</label>
+    <select name="sort" id="sort" onchange="this.form.submit()">
+      <option value="-created_at" {% if selected_sort == "-created_at" %}selected{% endif %}>Most Recent</option>
+      <option value="title" {% if selected_sort == "title" %}selected{% endif %}>A–Z</option>
+      <option value="-title" {% if selected_sort == "-title" %}selected{% endif %}>Z–A</option>
+    </select>
+  
+    <label for="tag">Filter by tag:</label>
+    <select name="tag" id="tag" onchange="this.form.submit()">
+      <option value="">All</option>
+      {% for tag in all_tags %}
+        <option value="{{ tag.name }}" {% if tag.name == selected_tag %}selected{% endif %}>
+          {{ tag.name }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <button type="submit">Search</button>
+</form>
+
+
+
 {% if recipes %}
     <div class="recipe-list">
         {% for recipe in recipes %}
@@ -72,7 +96,11 @@
     {% endif %}
     
 {% else %}
-    <p>No recipes yet. Be the first to add one!</p>
+    {% if request.GET.q or request.GET.tag or request.GET.sort %}
+        <p>No recipes match your search or filters.  Try adjusting your criteria</p>
+    {% else %}
+        <p>No recipes yet. Be the first to add one!</p>
+    {% endif %}
 {% endif %}
 
 

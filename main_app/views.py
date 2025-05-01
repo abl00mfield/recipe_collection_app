@@ -5,6 +5,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import models
+from django.db.models import Q
 
 from django.views.generic import (
     ListView,
@@ -62,7 +63,7 @@ class RecipeList(ListView):
     model = Recipe
     template_name = "recipes/recipe_list.html"
     context_object_name = "recipes"
-    ordering = ["-created_at"]
+    # ordering = ["-created_at"]
     paginate_by = 20
 
     def get_context_data(self, **kwargs):
@@ -76,7 +77,39 @@ class RecipeList(ListView):
             )
         else:
             context["user_collections"] = None
+
+        context["selected_sort"] = self.request.GET.get("sort", "-created_at")
+        context["selected_tag"] = self.request.GET.get("tag", "")
+        context["all_tags"] = Tag.objects.all().order_by("name")
         return context
+
+    def get_queryset(self):
+        queryset = Recipe.objects.all()
+
+        # filter by tag
+        tag_name = self.request.GET.get("tag")
+        if tag_name:
+            queryset = queryset.filter(tags__name__iexact=tag_name)
+
+        # filter by search keyword
+        query = self.request.GET.get("q")
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query)
+                | Q(description__icontains=query)
+                | Q(tags__name__icontains=query)
+            ).distinct()
+
+        # sort
+        sort = self.request.GET.get("sort", "-created_at")
+        if sort == "title":
+            queryset = queryset.order_by("title")
+        elif sort == "-title":
+            queryset = queryset.order_by("-title")
+        else:
+            queryset = queryset.order_by("-created_at")
+
+        return queryset
 
 
 class UserRecipeList(LoginRequiredMixin, ListView):
