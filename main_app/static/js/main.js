@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   messages.forEach((message) => {
     setTimeout(() => {
-      message.classList.add("fade-out"); // 👈 Add the class for sliding + fading
+      message.classList.add("fade-out"); // Add the class for sliding + fading
       setTimeout(() => {
         message.remove();
       }, 1000); // wait for fade/slide animation to complete
@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     el.textContent = localString;
   });
 
+  //adds a spinner overlay for loading
   const form = document.querySelector("form");
   const overlay = document.getElementById("loading-overlay");
 
@@ -33,6 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  //adding a new collection if user wants to create collection on the fly
   const selects = document.querySelectorAll(".collection-select");
   const modal = document.getElementById("new-collection-modal");
   const recipeInput = document.getElementById("new-collection-recipe-id");
@@ -52,5 +54,27 @@ document.addEventListener("DOMContentLoaded", function () {
   cancelBtn.addEventListener("click", () => {
     modal.classList.add("hidden");
     recipeInput.value = "";
+  });
+
+  //hidden menu for collection icon
+
+  document.querySelectorAll(".add-icon").forEach((button) => {
+    button.addEventListener("click", function () {
+      const recipeId = this.dataset.recipe;
+      const dropdown = document.getElementById(`dropdown-${recipeId}`);
+      dropdown.classList.toggle("hidden");
+    });
+  });
+
+  document.querySelectorAll(".recipe-card").forEach((card) => {
+    card.addEventListener("click", function (e) {
+      // Don’t follow if clicking a form element inside
+      if (
+        !e.target.closest("form") &&
+        !e.target.closest(".collection-dropdown-wrapper")
+      ) {
+        window.location.href = card.dataset.href;
+      }
+    });
   });
 });

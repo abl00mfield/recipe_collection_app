@@ -2,6 +2,12 @@ h2 {
   text-align: center;
   margin-bottom: 1.5rem;
 }
+h3 {
+  padding: 1rem;
+}
+p {
+  padding: 0.5rem;
+}
 
 .recipe-list {
   display: flex;
@@ -14,8 +20,9 @@ h2 {
 }
 
 .recipe-card {
-  display: block; /* allow a link (<a>) to behave like a block container */
-  width: 250px; /* You can adjust card width */
+  position: relative;
+  cursor: pointer;
+  width: 250px;
   background-color: #f9f9f9;
   border: 1px solid #eee;
   border-radius: 8px;
@@ -44,12 +51,63 @@ h2 {
 }
 
 .recipe-thumb-container {
-  overflow: hidden;
   width: 100%;
   height: 200px;
   border-radius: 6px;
+  position: relative;
 }
 
+.add-icon {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  background-color: #f9f9f9;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem 0.4rem;
+  z-index: 10;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); */
+}
+
+.collection-dropdown-wrapper {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+}
+
+.modal-btn {
+  background-color: black;
+  color: white;
+}
+
+.collection-dropdown {
+  position: absolute;
+  top: 2rem;
+  right: 0;
+  background: transparent;
+  /* border: 1px solid #ddd; */
+  padding: 0.5rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 20;
+  width: max-content;
+}
+
+.hidden {
+  display: none;
+}
+
+.add-icon i {
+  font-size: 1.2rem;
+  color: black;
+  transition: color 0.3s ease;
+}
+
+.add-icon:hover i {
+  color: #5a67d8;
+}
 /* .recipe-card h3 {
   transition: transform 0.3s ease, color 0.3s ease;
 } */

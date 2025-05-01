@@ -6,6 +6,7 @@
   <meta charset="UTF-8">
   
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script defer src="{% static 'js/main.js' %}"></script>
   {% block head %}
   {% endblock%}
@@ -16,8 +17,9 @@
   <nav>
     <ul>
       <li><a href="{% url 'landing' %}">Home</a></li>
-      {% if user.is_authenticated %}
       <li><a href="{% url 'recipe_list' %}">Recipes</a></li>
+      {% if user.is_authenticated %}
+      
       <li><a href="{% url 'collection_list' %}">My Collections</a></li>
       <li><a href="{% url 'recipe_create' %}">Add a New Recipe</a></li>
       <li><a href="{% url 'collection_create' %}">Add a New Collection</a></li>
