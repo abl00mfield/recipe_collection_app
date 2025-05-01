@@ -7,7 +7,11 @@
 {% endblock%}
 
 {% block content %}
-<h2>All Recipes</h2>
+{% if page_title %}
+  <h2>{{ page_title }}</h2>
+{% else %}
+  <h2>All Recipes</h2>
+{% endif %}
 
 {% if recipes %}
     <div class="recipe-list">

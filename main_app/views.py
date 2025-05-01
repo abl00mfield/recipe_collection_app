@@ -67,6 +67,7 @@ class RecipeList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
+        context["page_title"] = "All Recipes"
 
         if user.is_authenticated:
             context["user_collections"] = Collection.objects.filter(
@@ -74,6 +75,22 @@ class RecipeList(ListView):
             )
         else:
             context["user_collections"] = None
+        return context
+
+
+class UserRecipeList(LoginRequiredMixin, ListView):
+    model = Recipe
+    template_name = "recipes/recipe_list.html"
+    context_object_name = "recipes"
+    ordering = ["title"]
+
+    def get_queryset(self):
+        return Recipe.objects.filter(author=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "My Recipes"
+        context["user_collections"] = Collection.objects.filter(user=self.request.user)
         return context
 
 

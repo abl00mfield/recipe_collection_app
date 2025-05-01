@@ -24,6 +24,7 @@ urlpatterns = [
         views.RecipeDelete.as_view(),
         name="recipe_delete",
     ),
+    path("my-recipes/", views.UserRecipeList.as_view(), name="user_recipe_list"),
     # Collection URLs
     path("collections/", views.CollectionList.as_view(), name="collection_list"),
     path(
