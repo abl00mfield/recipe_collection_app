@@ -12,17 +12,22 @@
 
   {% if collection.recipes.all %}
     <div class="recipe-list">
-      {% for recipe in collection.recipes.all %}
-        <a href="{% url 'recipe_detail' recipe.id %}" class="recipe-card">
-          <div class="recipe-thumb-container">
-            {% if recipe.photo %}
-              <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="recipe-thumb">
-            {% else %}
-              <img src="{% static 'img/default-recipe-thumb.png' %}" alt="Default image" class="recipe-thumb">
-            {% endif %}
-          </div>
-          <h4>{{ recipe.title }}</h4>
-        </a>
+        {% for recipe in collection.recipes.all %}
+        <div class="recipe-card" data-href="{% url 'recipe_detail' recipe.id %}">    
+            <div class="recipe-thumb-container">                    
+                {% if recipe.photo %}
+                <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="recipe-thumb">
+                {% else %}
+                <img src="{% static 'img/default-recipe-thumb.png' %}" alt="Default image" class="recipe-thumb">
+                {% endif %}
+            </div>
+            <h4>{{ recipe.title }}</h4>
+            
+            <form method="POST" action="{% url 'collection_remove_recipe' collection.id recipe.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn danger-btn">Remove</button>
+            </form>
+        </div>
       {% endfor %}
     </div>
   {% else %}

@@ -92,6 +92,7 @@ class RecipeDetail(DetailView):
             existing_feedback = Feedback.objects.filter(
                 recipe=recipe, user=user
             ).first()
+            context["user_collections"] = Collection.objects.filter(user=user)
 
             if not existing_feedback:
                 context["feedback_form"] = FeedbackForm()
@@ -270,7 +271,11 @@ def create_collection_inline(request):
 def collection_remove_recipe(request, collection_id, recipe_id):
     collection = get_object_or_404(Collection, id=collection_id, user=request.user)
     recipe = get_object_or_404(Recipe, id=recipe_id)
-    collection.recipes.remove(recipe)
+
+    if request.method == "POST":
+        collection.recipes.remove(recipe)
+        messages.success(request, f'"{recipe.title}" removed from "{collection.name}".')
+
     return redirect("collection_detail", collection_id=collection.id)
 
 

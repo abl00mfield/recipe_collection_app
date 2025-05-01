@@ -23,6 +23,29 @@
       <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="recipe-photo">
     {% endif %}
 
+    {% if user.is_authenticated %}
+    <form method="POST" action="{% url 'collection_add_recipe' recipe.id %}" class="add-to-collection-form">
+        {% csrf_token %}
+        <label for="collection_id">Add to Collection:</label>
+        <select 
+            name="collection_id" 
+            id="collection_id" 
+            class="collection-select"
+            data-recipe-id="{{ recipe.id }}"
+            required>
+            <option value="" disabled selected>Select collection</option>
+            {% for collection in user_collections %}
+                <option value="{{ collection.id }}">{{ collection.name }}</option>
+            {% endfor %}
+            <option value="__new__">➕ New Collection</option>
+        </select>
+        <button type="submit" class="btn">Add</button>
+    </form>
+
+    {% else %}
+    <p><a href="{% url 'signin' %}">Sign in</a> to add this recipe to a collection.</p>
+    {% endif %}
+
     <h3>Description</h3>
     <p>{{ recipe.description }}</p>
 
@@ -105,5 +128,19 @@
     {% else %}
     <p>No reviews yet.</p>
     {% endif %}
+  </div>
+  <div id="new-collection-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <form method="POST" action="{% url 'collection_create_inline' %}">
+        {% csrf_token %}
+        <label for="new-collection-name">New collection name:</label>
+        <input type="text" id="new-collection-name" name="name" required>
+        <input type="hidden" id="new-collection-recipe-id" name="recipe_id">
+        <div class="modal-buttons">
+          <button type="submit" class="btn">Create</button>
+          <button type="button" id="cancel-modal" class="btn danger-btn">Cancel</button>
+        </div>
+      </form>
+    </div>
   </div>
 {% endblock %}
