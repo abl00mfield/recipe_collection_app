@@ -31,18 +31,14 @@
       {% endif %}
     </ul>
   </nav>
-  <header>
-    {% if messages %}
-    <ul class="messages">
+  <div id="toast-container" class="toast-container">
     {% for message in messages %}
-      <li class="{{ message.tags }}">{{ message }}</li>
+      <div class="toast {{ message.tags }}">
+        {{ message }}
+      </div>
     {% endfor %}
-    </ul>
-    {% endif %}
-  </header>
-
+  </div>
   <main>
-    
     {% block content %}
     <!-- Page-specific content will be inserted here -->
     {% endblock %}
@@ -50,6 +46,8 @@
 
   <footer>
     <p>&copy; 2025 Recipe Box App</p>
+
+    <small><p>Default image <a href="http://www.freepik.com">designed by macrovector / Freepik</a></p></small>
   </footer>
 
   <div id="loading-overlay" class="hidden">
