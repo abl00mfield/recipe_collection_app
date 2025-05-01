@@ -151,3 +151,23 @@ p {
   justify-content: center;
   gap: 1rem;
 }
+
+.pagination {
+  text-align: center;
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.pagination a {
+  padding: 0.5rem 1rem;
+  background-color: #5a67d8;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.pagination a:hover {
+  background-color: #434190;
+}
