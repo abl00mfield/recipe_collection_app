@@ -212,18 +212,31 @@ class CollectionCreate(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class CollectionUpdate(LoginRequiredMixin, UpdateView):
+class CollectionUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Collection
     form_class = CollectionForm
     template_name = "collections/collection_form.html"
     pk_url_kwarg = "collection_id"
 
+    def test_func(self):
+        collection = self.get_object()
+        return self.request.user == collection.user
 
-class CollectionDelete(LoginRequiredMixin, DeleteView):
+
+class CollectionDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Collection
     template_name = "collections/collection_confirm_delete.html"
     success_url = "/collections/"
     pk_url_kwarg = "collection_id"
+
+    def test_func(self):
+        collection = self.get_object()
+        return self.request.user == collection.user
+
+    def delete(self, request, *args, **kwargs):
+        response = super().delete(request, *args, **kwargs)
+        messages.success(self.request, "Collection Deleted")
+        return response
 
 
 # Custom FBV for adding/removing recipes from collections
@@ -277,25 +290,3 @@ def collection_remove_recipe(request, collection_id, recipe_id):
         messages.success(request, f'"{recipe.title}" removed from "{collection.name}".')
 
     return redirect("collection_detail", collection_id=collection.id)
-
-
-# @login_required
-# def delete_comment(request, comment_id):
-#     comment = get_object_or_404(Comment, id=comment_id, author=request.user)
-#     recipe_id = comment.recipe.id
-#     comment.delete()
-#     return redirect("recipe_detail", recipe_id=recipe_id)
-
-
-# @login_required
-# def add_or_update_rating(request, recipe_id):
-#     recipe = get_object_or_404(Recipe, id=recipe_id)
-#     rating, created = Rating.objects.get_or_create(user=request.user, recipe=recipe)
-#     if request.method == "POST":
-#         form = RatingForm(request.POST, instance=rating)
-#         if form.is_valid():
-#             form.save()
-#             return redirect("recipe_detail", recipe_id=recipe.id)
-#     else:
-#         form = RatingForm(instance=rating)
-#     return render(request, "ratings/rating_form.html", {"form": form, "recipe": recipe})

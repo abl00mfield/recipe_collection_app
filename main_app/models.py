@@ -46,6 +46,9 @@ class Collection(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="collections")
     recipes = models.ManyToManyField(Recipe, related_name="collections", blank=True)
 
+    def get_absolute_url(self):
+        return reverse("collection_detail", kwargs={"collection_id": self.pk})
+
     def __str__(self):
         return f"{self.name} ({self.user.username})"
 

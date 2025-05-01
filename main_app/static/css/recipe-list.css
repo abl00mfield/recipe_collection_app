@@ -108,9 +108,6 @@ p {
 .add-icon:hover i {
   color: #5a67d8;
 }
-/* .recipe-card h3 {
-  transition: transform 0.3s ease, color 0.3s ease;
-} */
 
 .recipe-card:hover h3 {
   color: #5a67d8;
@@ -148,4 +145,9 @@ p {
 .modal-overlay.hidden {
   display: none;
 }
-/* Style the modal or make it inline based on your layout */
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}

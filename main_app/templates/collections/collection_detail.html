@@ -30,8 +30,15 @@
         </div>
       {% endfor %}
     </div>
+    {% if request.user == collection.user %}
+    
+    {% endif %}
   {% else %}
     <p>This collection doesn't have any recipes yet.</p>
   {% endif %}
+  <div class = "button-container">
+    <a class = "btn" href="{% url 'collection_update' collection.id %}">Edit</a>
+    <a class ="btn danger-btn" href="{% url 'collection_delete' collection.id %}">Delete</a>
+</div>
 </div>
 {% endblock %}

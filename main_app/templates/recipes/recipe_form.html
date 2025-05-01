@@ -3,12 +3,23 @@
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/form.css' %}">
-<title>Add a recipe</title>
+{% if object %}
+<title>Edit {{ recipe.title }}</title>
+{% else %}
+<title>Add a Recipe</title>
+{% endif %}
 {% endblock%}
 
 {% block content %}
-  <h2>Create a New Recipe</h2>
-  <form method="POST" enctype="multipart/form-data" data-loading-message="Creating your recipe...">
+    {% if object %}
+    <h2>Edit - {{ object.title }}</h2>
+    {% else %}
+    <h2>Create a New Recipe</h2>
+    {% endif %}
+  <form 
+    method="POST" 
+    enctype="multipart/form-data" 
+    data-loading-message="{% if object %}Updating your recipe...{% else %}Creating your recipe...{% endif %}">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Save Recipe</button>

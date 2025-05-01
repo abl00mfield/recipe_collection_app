@@ -51,11 +51,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  cancelBtn.addEventListener("click", () => {
-    modal.classList.add("hidden");
-    recipeInput.value = "";
-  });
-
+  if (cancelBtn) {
+    cancelBtn.addEventListener("click", () => {
+      modal.classList.add("hidden");
+      recipeInput.value = "";
+    });
+  }
   //hidden menu for collection icon
 
   document.querySelectorAll(".add-icon").forEach((button) => {
