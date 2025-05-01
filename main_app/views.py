@@ -70,6 +70,14 @@ class RecipeList(ListView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         context["page_title"] = "All Recipes"
+        collection_id = self.request.GET.get("collection_id")
+        if collection_id and user.is_authenticated:
+            try:
+                context["target_collection"] = Collection.objects.get(
+                    id=collection_id, user=user
+                )
+            except Collection.DoesNotExist:
+                context["target_collection"] = None
 
         if user.is_authenticated:
             user_collections = (
@@ -325,6 +333,7 @@ def collection_add_recipe(request, recipe_id):
 
     if request.method == "POST":
         collection_id = request.POST.get("collection_id")
+        next_url = request.POST.get("next")
         if not collection_id:
             messages.error(request, "Please select a collection")
             return redirect("recipe_list")
@@ -336,6 +345,9 @@ def collection_add_recipe(request, recipe_id):
             messages.success(request, f'"{recipe.title}" was added to your collection.')
         else:
             messages.info(request, f'"{recipe.title}" is already in this collection.')
+
+        if next_url:
+            return redirect(next_url)
 
     return redirect("collection_detail", collection_id=collection.id)
 

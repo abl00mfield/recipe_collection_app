@@ -40,7 +40,22 @@
 {% if recipes %}
     <div class="recipe-list">
         {% for recipe in recipes %}
-        <div class="recipe-card" data-href="{% url 'recipe_detail' recipe.id %}">       
+        <div class="recipe-card" data-href="{% url 'recipe_detail' recipe.id %}"> 
+            {% if target_collection %}  
+            <form action="{% url 'collection_add_recipe' recipe.id %} " method="POST">
+                {% csrf_token %}
+                <input type="hidden" value ="{{ target_collection.id }}" name="collection_id">
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                <button class="add-icon" type="submit" title="Add to {{ target_collection.name }}">
+                    {% if recipe.id in saved_recipe_ids %}
+                      <i class="fa-solid fa-bookmark"></i>
+                    {% else %}
+                      <i class="fa-regular fa-bookmark"></i>
+                    {% endif %}
+                </button>
+            </form>
+            {% else %}
+                
             <div class="collection-dropdown-wrapper">                              
                 {% if user.is_authenticated %}               
                 <button class="add-icon" type="button" data-recipe="{{ recipe.id }}" class="icon">
@@ -70,11 +85,16 @@
                 </div>
                 {% endif %}    
             </div>
-            {% if recipe.photo %}
+            {% endif %}
+            
             <div class="recipe-thumb-container">       
+                {% if recipe.photo %}
                 <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class ="recipe-thumb">
+                {% else %}
+                <img src="{% static 'img/default_recipe.jpg' %}" alt="{{ recipe.title }}" class ="recipe-thumb">
+                {% endif %}  
             </div>  
-            {% endif %}                 
+                           
 
             <h3>{{ recipe.title }}</h3>
             <p>by {{ recipe.author.username }}</p>

@@ -37,6 +37,7 @@
     <p>This collection doesn't have any recipes yet.</p>
   {% endif %}
   <div class = "button-container">
+    <a href="{% url 'recipe_list' %}?collection_id={{ collection.id }}" class="btn">Add Recipes to This Collection</a>
     <a class = "btn" href="{% url 'collection_update' collection.id %}">Edit</a>
     <a class ="btn danger-btn" href="{% url 'collection_delete' collection.id %}">Delete</a>
 </div>
