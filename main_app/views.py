@@ -14,12 +14,13 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-from .models import Recipe, Collection, Feedback, Tag
+from .models import Recipe, Collection, Feedback, Tag, UserProfile
 from .forms import (
     RecipeForm,
     CollectionForm,
     SignUpForm,
     FeedbackForm,
+    UserProfileForm,
 )
 
 
@@ -32,9 +33,12 @@ def signup(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
+            UserProfile.objects.create(user=user)
             login(request, user)
-            messages.success(request, "Account created succesfully!")
-            return redirect("recipe_list")
+            messages.success(
+                request, "Account created succesfully!, Let's finish your profile!"
+            )
+            return redirect("edit_profile")
     else:
         form = SignUpForm()
     return render(request, "registration/signup.html", {"form": form})
@@ -52,11 +56,6 @@ class Signin(LoginView):
 def signout(request):
     logout(request)
     return redirect("landing")
-
-
-@login_required
-def profile(request):
-    pass
 
 
 class RecipeList(ListView):
@@ -381,3 +380,24 @@ def collection_remove_recipe(request, collection_id, recipe_id):
         messages.success(request, f'"{recipe.title}" removed from "{collection.name}".')
 
     return redirect("collection_detail", collection_id=collection.id)
+
+
+@login_required
+def edit_profile(request):
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect("profile")
+    else:
+        form = UserProfileForm(instance=profile)
+
+    return render(request, "users/edit_profile.html", {"form": form})
+
+
+@login_required
+def profile(request):
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    return render(request, "users/profile.html", {"profile": profile})

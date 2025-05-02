@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
-from .models import Recipe, Collection, Feedback
+from .models import Recipe, Collection, Feedback, UserProfile
 import re
 
 
@@ -82,3 +82,9 @@ class FeedbackForm(forms.ModelForm):
                 attrs={"rows": 5, "placeholder": "Leave a comment..."}
             ),
         }
+
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ["first_name", "last_name", "bio", "location", "profile_picture"]
