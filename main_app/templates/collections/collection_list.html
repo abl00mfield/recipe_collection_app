@@ -12,7 +12,19 @@
 {% if collections %}
 <div class="collection-list">
     {% for collection in collections%}
-    <a href="{% url 'collection_detail' collection.id %}" class="collection-card">
+    <div class="collection-card" data-href="{% url 'collection_detail' collection.id %}" >
+        <form 
+            method="POST" 
+            action="{% url 'collection_delete' collection.id %}"
+            class="delete-form"
+            onsubmit="return confirm('Delete this collection?');"
+        >
+        {% csrf_token %}
+            <button type="submit" class="delete-icon" title="Delete Collection" aria-label="Delete Collection">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        </form>
+        
         <h3>{{ collection.name }}</h3>
         <div class="recipe-thumb-container">
             {% if collection.recipes.first and collection.recipes.first.photo %}
@@ -28,8 +40,8 @@
                 class="recipe-thumb"
               />
             {% endif %}
-          </div>
-    </a>
+        </div>
+    </div>
     {% endfor %}
 </div>
 {% else %}

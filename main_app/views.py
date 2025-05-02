@@ -265,10 +265,9 @@ class RecipeDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         recipe = self.get_object()
         return self.request.user == recipe.author
 
-    def delete(self, request, *args, **kwargs):
-        response = super().delete(request, *args, **kwargs)
-        messages.success(self.request, "Recipe Deleted")
-        return response
+    def form_valid(self, form):
+        messages.success(self.request, "Recipe deleted successfully!")
+        return super().form_valid(form)
 
 
 class CollectionList(LoginRequiredMixin, ListView):
@@ -295,6 +294,7 @@ class CollectionCreate(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        messages.success(self.request, "Collection created successfully!")
         return super().form_valid(form)
 
 
@@ -308,6 +308,10 @@ class CollectionUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         collection = self.get_object()
         return self.request.user == collection.user
 
+    def form_valid(self, form):
+        messages.success(self.request, "Collection updated!")
+        return super().form_valid(form)
+
 
 class CollectionDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Collection
@@ -319,10 +323,9 @@ class CollectionDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         collection = self.get_object()
         return self.request.user == collection.user
 
-    def delete(self, request, *args, **kwargs):
-        response = super().delete(request, *args, **kwargs)
-        messages.success(self.request, "Collection Deleted")
-        return response
+    def form_valid(self, form):
+        messages.success(self.request, "Collection deleted successfully!")
+        return super().form_valid(form)
 
 
 # Custom FBV for adding/removing recipes from collections
@@ -345,8 +348,8 @@ def collection_add_recipe(request, recipe_id):
         else:
             messages.info(request, f'"{recipe.title}" is already in this collection.')
 
-        if next_url:
-            return redirect(next_url)
+        # if next_url:
+        #     return redirect(next_url)
 
     return redirect("collection_detail", collection_id=collection.id)
 

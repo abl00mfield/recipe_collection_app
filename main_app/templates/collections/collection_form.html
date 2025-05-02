@@ -7,10 +7,22 @@
 {% endblock%}
 
 {% block content %}
-  <h2>Create a New Collection</h2>
+
+{% if object%}
+<h2>Edit {{ object.name }}</h2>
+
+{% else %}
+<h2>Create a New Collection</h2>
+
+{% endif %}
   <form method="POST" enctype="multipart/form-data" data-loading-message="Creating your collection...">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Save Collection</button>
+    {% if object %}
+        <button type="submit">Update Collection</button>
+    {% else %}
+        <button type="submit">Save Collection</button>
+    {% endif %}
+    
   </form>
 {% endblock %}

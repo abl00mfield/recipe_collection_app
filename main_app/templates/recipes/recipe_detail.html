@@ -35,10 +35,9 @@
                 <h3>In Collections</h3>
                 <ul class="collection-list">
                     {% for collection in collections %}
-                    <li>{{ collection.name }}</li>
-                    
-                </ul>
+                    <li>{{ collection.name }}</li>                  
                 {% empty %}
+                </ul>
                 <p>Not added to any collections yet!</p>
                 {% endfor %}
                 

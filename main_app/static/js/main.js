@@ -67,4 +67,12 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+
+  document.querySelectorAll(".collection-card").forEach((card) => {
+    card.addEventListener("click", function (e) {
+      if (!e.target.closest("form")) {
+        window.location.href = card.dataset.href;
+      }
+    });
+  });
 });
