@@ -76,7 +76,15 @@
                         >
                             <option value="" disabled selected>Select collection</option>
                             {% for collection in user_collections %}
-                                <option value="{{ collection.id }}">{{ collection.name }}</option>
+                                {% if recipe in collection.recipes.all %}
+                                    <option value="{{ collection.id }}" disabled >
+                                    {{ collection.name }} ☑️
+                                    </option>
+                                {% else %}
+                                    <option value="{{ collection.id }}">
+                                    {{ collection.name }}
+                                    </option>
+                                {% endif %}
                             {% endfor %}
                             <option value="__new__">+ New Collection</option>
                         </select>
