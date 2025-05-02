@@ -31,6 +31,7 @@ class RecipeForm(forms.ModelForm):
             "ingredients",
             "instructions",
             "photo",
+            "photo_credit",
         ]
 
     def __init__(self, *args, **kwargs):

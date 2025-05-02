@@ -7,13 +7,24 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+figure {
+  margin: 0;
+  padding: 0;
+}
 .recipe-photo {
   /* width: 100%; */
   width: 400px;
   height: 400px;
   object-fit: cover;
   border-radius: 6px;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.photo-credit {
+  font-size: 0.8rem;
+  color: #777;
+  text-align: right;
+  /* margin-top: 0.5rem; */
 }
 
 .photo-collection-container {

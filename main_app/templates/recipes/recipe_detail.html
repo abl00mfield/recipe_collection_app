@@ -22,7 +22,12 @@
     <div class="photo-collection-container">
         <div class="recipe-photo">
         {% if recipe.photo %}
-        <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="recipe-photo">
+        {% comment %} <figure> {% endcomment %}
+            <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="recipe-photo">
+            {% if recipe.photo_credit %}
+            <figcaption class="photo-credit">{{ recipe.photo_credit }}</figcaption>
+            {% endif %}
+        {% comment %} </figure> {% endcomment %}
         
         {% else %}
         <img src="{% static 'img/default_recipe.jpg' %}" alt="{{ recipe.title }}" class="recipe-photo">

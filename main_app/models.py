@@ -20,6 +20,11 @@ class Recipe(models.Model):
     ingredients = models.TextField()
     instructions = models.TextField()
     photo = CloudinaryField("image", blank=True, null=True)
+    photo_credit = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Optional: Credit the source or owner of the photo",
+    )
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipes")
     tags = models.ManyToManyField(Tag, blank=True, related_name="recipes")
     created_at = models.DateTimeField(auto_now_add=True)
