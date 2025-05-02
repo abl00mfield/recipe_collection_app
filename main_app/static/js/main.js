@@ -75,4 +75,16 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+
+  const fileInput = document.getElementById("id_photo");
+  const clearCheckbox = document.querySelector("#photo-clear_id");
+
+  //if user checks the box to clear the file and upload a new file
+  if (fileInput && clearCheckbox) {
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files.length > 0) {
+        clearCheckbox.checked = false;
+      }
+    });
+  }
 });

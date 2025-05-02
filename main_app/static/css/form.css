@@ -64,3 +64,33 @@ input[type="submit"]:hover {
   font-size: 0.9rem;
   margin-top: 0.25rem;
 }
+
+.photo-preview img.thumbnail {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.remove-photo {
+  display: flex;
+  margin: 0.5rem 0 1.5rem;
+  font-size: 0.9rem;
+  color: #444;
+  align-items: center;
+}
+
+.remove-photo input {
+  margin-right: 0.5rem;
+}
+
+.remove-photo label {
+  align-self: center;
+  margin-bottom: 0;
+}
+
+input[type="file"] + span {
+  display: none;
+}

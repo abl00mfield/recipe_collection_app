@@ -1,0 +1,10 @@
+{% if widget.is_initial %}
+  <div class="photo-preview">
+    <img src="{{ widget.value.url }}" alt="Current photo" class="thumbnail">
+  </div>
+  <div class="remove-photo">
+    <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}">
+    <label for="{{ widget.checkbox_id }}">Remove photo</label>
+  </div>
+{% endif %}
+<input type="{{ widget.type }}" name="{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %}>

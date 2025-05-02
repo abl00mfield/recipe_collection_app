@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from .models import Recipe, Collection, Feedback, UserProfile
+from cloudinary.uploader import destroy
 import re
 
 
@@ -33,14 +34,26 @@ class RecipeForm(forms.ModelForm):
             "photo",
             "photo_credit",
         ]
+        widgets = {
+            "photo": forms.ClearableFileInput(attrs={"class": "custom-file-input"})
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # self.fields["photo"].widget.attrs.update({"class": "custom-file-input"})
+
+        # self.fields["photo"].widget.clear_checkbox_label = ""
+        self.fields["photo"].widget.template_name = "widgets/clearable_file_input.html"
         # pre fill custom tags if editing
         if self.instance.pk:
             exisiting_tags = self.instance.tags.values_list("name", flat=True)
             self.fields["custom_tags"].initial = " ".join(exisiting_tags)
+
+        if self.instance and self.instance.pk and self.instance.photo:
+            self.fields["photo"].widget.attrs.update(
+                {"data-has-photo": "true", "data-photo-url": self.instance.photo.url}
+            )
 
     def clean_source(self):
         url = self.cleaned_data.get("source")
@@ -64,6 +77,41 @@ class RecipeForm(forms.ModelForm):
         ]
 
         return list(set(tag_names))
+
+    def save(self, commit=True):
+        recipe = super().save(commit=False)
+
+        # detect if the photo was replaced
+        if self.instance.pk:
+            old_photo = Recipe.objects.get(pk=self.instance.pk).photo
+
+            print("***OLD PHOTO", old_photo)
+
+            new_photo = self.cleaned_data.get("photo")
+
+            print("***NEW PHOTO", new_photo)
+
+            # case 1: user uploads a new photo, old photo should be deleletd
+            if new_photo and old_photo and new_photo != old_photo:
+                try:
+                    destroy(old_photo.public_id)
+                    print("OLD PHOTO REPLACED")
+                except Exception as e:
+                    print(f"Error deleting replaced Cloudinary image: {e}")
+
+            # case 2: user cleared the image (checked "remove photo")
+            elif not new_photo and old_photo:
+                try:
+                    destroy(old_photo.public_id)
+                    print("OLD PHOTO REMOVED")
+                except Exception as e:
+                    print(f"Error deleting replaced Cloudinary image: {e}")
+                self.instance.photo = None
+
+        if commit:
+            recipe.save()
+            self.save_m2m()
+        return recipe
 
 
 class CollectionForm(forms.ModelForm):

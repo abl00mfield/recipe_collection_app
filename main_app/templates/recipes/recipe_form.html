@@ -16,12 +16,33 @@
     {% else %}
     <h2>Create a New Recipe</h2>
     {% endif %}
-  <form 
+    <form 
     method="POST" 
     enctype="multipart/form-data" 
     data-loading-message="{% if object %}Updating your recipe...{% else %}Creating your recipe...{% endif %}">
+    
     {% csrf_token %}
-    {{ form.as_p }}
+
+    {{ form.non_field_errors }}
+
+    <p>{{ form.title.label_tag }} {{ form.title }}</p>
+    <p>{{ form.source.label_tag }} {{ form.source }}</p>
+    <p>{{ form.description.label_tag }} {{ form.description }}</p>
+    <p>{{ form.ingredients.label_tag }} {{ form.ingredients }}</p>
+    <p>{{ form.instructions.label_tag }} {{ form.instructions }}</p>
+
+    
+    <div class="form-group">
+      <label for="{{ form.photo.id_for_label }}">Photo:</label>     
+      {{ form.photo }}        
+    </div>
+
+    <p>{{ form.photo_credit.label_tag }} {{ form.photo_credit }}</p>
+    <p>{{ form.custom_tags.label_tag }} {{ form.custom_tags }}</p>
+    {% if form.custom_tags.help_text %}
+    <small class="form-help">{{ form.custom_tags.help_text }}</small>
+    {% endif %}
     <button type="submit">Save Recipe</button>
   </form>
+
 {% endblock %}
