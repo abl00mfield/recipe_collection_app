@@ -20,23 +20,21 @@
     {% endif %}
 
     <div class="photo-collection-container">
-        <div class="recipe-photo">
-        {% if recipe.photo %}
-        {% comment %} <figure> {% endcomment %}
+        <figure class="recipe-photo-wrapper">
+            {% if recipe.photo %}      
             <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="recipe-photo">
             {% if recipe.photo_credit %}
             <figcaption class="photo-credit">{{ recipe.photo_credit }}</figcaption>
             {% endif %}
-        {% comment %} </figure> {% endcomment %}
-        
-        {% else %}
-        <img src="{% static 'img/default_recipe.jpg' %}" alt="{{ recipe.title }}" class="recipe-photo">
-        {% endif %}
-        </div>
+       
+            {% else %}
+            <img src="{% static 'img/default_recipe.jpg' %}" alt="{{ recipe.title }}" class="recipe-photo">
+            {% endif %}
+        </figure>
+
         <div class="recipe-collection-info">
             {% if user.is_authenticated %}
-            <div class="recipe-collections">
-                
+            <div class="recipe-collections">              
                 <h3>In Collections</h3>
                 <ul class="collection-list">
                     {% for collection in collections %}
@@ -44,10 +42,9 @@
                 {% empty %}
                 </ul>
                 <p>Not added to any collections yet!</p>
-                {% endfor %}
-                
-                
+                {% endfor %}          
             </div>
+
             <div class="collection-form-container">
                 <form method="POST" action="{% url 'collection_add_recipe' recipe.id %}" class="add-to-collection-form">
                 {% csrf_token %}
@@ -79,7 +76,7 @@
     <p>{{ recipe.description }}</p>
 
     <h3>Ingredients</h3>
-    <ul>
+    <ul class="ingredient-list">
         {% for line in recipe.ingredients.splitlines %}
           {% if line %}
             <li>{{ line }}</li>
@@ -88,7 +85,7 @@
       </ul>
 
       <h3>Instructions</h3>
-      <ol>
+      <ol class="instruction-list">
         {% for step in recipe.instructions.splitlines %}
           {% if step %}
             <li>{{ step }}</li>
@@ -106,7 +103,7 @@
     {% endif %}
 
     {% if request.user == recipe.author %}
-    <div class = "button container">
+    <div class = "button-container">
         <a class = "btn" href="{% url 'recipe_edit' recipe.id %}">Edit</a>
         <a class ="btn danger-btn" href="{% url 'recipe_delete' recipe.id %}">Delete</a>
     </div>
@@ -129,7 +126,7 @@
         {{ feedback_form.comment }}
         </div>
 
-        <button class = "btn" type="submit">Submit Feedback</button>
+        <button class = "btn feedback" type="submit">Submit Feedback</button>
     </form>
     {% else %}
     <p><a href="{% url 'signin' %}">Sign in</a> to leave a rating and comment.</p>

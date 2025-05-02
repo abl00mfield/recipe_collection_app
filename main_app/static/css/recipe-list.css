@@ -1,5 +1,4 @@
 h2 {
-  text-align: center;
   margin-bottom: 1.5rem;
 }
 h3 {
@@ -62,14 +61,13 @@ p {
   position: absolute;
   top: 0.25rem;
   right: 0.25rem;
-  background-color: #f9f9f9;
+  background-color: var(--color-card-bg);
   border: none;
   border-radius: 50%;
   font-size: 1.2rem;
   cursor: pointer;
   padding: 0.25rem 0.4rem;
   z-index: 10;
-  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); */
 }
 
 .collection-dropdown-wrapper {
@@ -79,8 +77,8 @@ p {
 }
 
 .modal-btn {
-  background-color: black;
-  color: white;
+  background-color: var(--color-dark-teal);
+  color: var(--color-white);
 }
 
 .collection-dropdown {
@@ -88,7 +86,6 @@ p {
   top: 2rem;
   right: 0;
   background: transparent;
-  /* border: 1px solid #ddd; */
   padding: 0.5rem;
   border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -107,11 +104,11 @@ p {
 }
 
 .add-icon:hover i {
-  color: #5a67d8;
+  color: var(--color-teal-green);
 }
 
 .recipe-card:hover h3 {
-  color: #5a67d8;
+  color: var(--color-teal-green);
 }
 
 .modal-overlay {
@@ -163,14 +160,14 @@ p {
 
 .pagination a {
   padding: 0.5rem 1rem;
-  background-color: #5a67d8;
+  background-color: var(--color-teal-green);
   color: white;
   border-radius: 5px;
   text-decoration: none;
 }
 
 .pagination a:hover {
-  background-color: #434190;
+  background-color: var(--color-teal-green-hover);
 }
 
 .filter-form {
@@ -217,8 +214,8 @@ p {
 }
 
 .cover-btn.selected {
-  background-color: #5a67d8;
-  color: white;
+  background-color: var(--color-teal-green);
+  color: var(--color-white);
   cursor: default;
   border: none;
 }
