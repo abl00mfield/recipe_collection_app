@@ -84,18 +84,13 @@ class RecipeForm(forms.ModelForm):
         # detect if the photo was replaced
         if self.instance.pk:
             old_photo = Recipe.objects.get(pk=self.instance.pk).photo
-
-            print("***OLD PHOTO", old_photo)
-
             new_photo = self.cleaned_data.get("photo")
-
-            print("***NEW PHOTO", new_photo)
 
             # case 1: user uploads a new photo, old photo should be deleletd
             if new_photo and old_photo and new_photo != old_photo:
                 try:
                     destroy(old_photo.public_id)
-                    print("OLD PHOTO REPLACED")
+
                 except Exception as e:
                     print(f"Error deleting replaced Cloudinary image: {e}")
 
@@ -103,7 +98,7 @@ class RecipeForm(forms.ModelForm):
             elif not new_photo and old_photo:
                 try:
                     destroy(old_photo.public_id)
-                    print("OLD PHOTO REMOVED")
+
                 except Exception as e:
                     print(f"Error deleting replaced Cloudinary image: {e}")
                 self.instance.photo = None

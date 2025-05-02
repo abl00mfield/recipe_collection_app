@@ -50,6 +50,14 @@ class Collection(models.Model):
     name = models.CharField(max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="collections")
     recipes = models.ManyToManyField(Recipe, related_name="collections", blank=True)
+    cover_recipe = models.ForeignKey(
+        "Recipe",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="cover_for_collections",
+        help_text="Recipe used as cover image for this collection",
+    )
 
     def get_absolute_url(self):
         return reverse("collection_detail", kwargs={"collection_id": self.pk})

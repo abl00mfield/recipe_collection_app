@@ -27,6 +27,24 @@
                 {% csrf_token %}
                 <button type="submit" class="btn danger-btn">Remove</button>
             </form>
+
+            <form 
+                method="POST" 
+                action="{% url 'set_collection_cover' collection.id recipe.id %}" 
+                class="set-cover-form"
+            >
+                {% csrf_token %}
+                {% if collection.cover_recipe and collection.cover_recipe.id == recipe.id %}
+                <button type="submit" class="cover-btn selected" title="This is the current cover photo" disabled>
+                Cover photo
+                </button>
+                {% else %}
+                <button type="submit" class="cover-btn" title="Set as cover photo">
+                Set as Cover Photo
+                </button>
+                {% endif %}
+            </form>
+
         </div>
       {% endfor %}
     </div>

@@ -195,3 +195,30 @@ p {
   border-radius: 5px;
   border: 1px solid #ccc;
 }
+
+.set-cover-form {
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.cover-btn {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  background-color: #edf2f7;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cover-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.cover-btn.selected {
+  background-color: #5a67d8;
+  color: white;
+  cursor: default;
+  border: none;
+}

@@ -63,6 +63,11 @@ urlpatterns = [
         views.create_collection_inline,
         name="collection_create_inline",
     ),
+    path(
+        "collections/<int:collection_id>/set_cover/<int:recipe_id>/",
+        views.set_collection_cover,
+        name="set_collection_cover",
+    ),
     path("profile/edit", views.edit_profile, name="edit_profile"),
     path("profile/", views.profile, name="profile"),
     path(

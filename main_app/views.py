@@ -386,6 +386,21 @@ def collection_remove_recipe(request, collection_id, recipe_id):
 
 
 @login_required
+def set_collection_cover(request, collection_id, recipe_id):
+    collection = get_object_or_404(Collection, id=collection_id, user=request.user)
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+
+    if recipe not in collection.recipes.all():
+        messages.error(request, "That recipe is not part of the collection")
+        return redirect("collection_detail", collection_id=collection.id)
+
+    collection.cover_recipe = recipe
+    collection.save()
+    messages.success(request, f'"{recipe.title}" set as cover photo')
+    return redirect("collection_detail", collection_id=collection.id)
+
+
+@login_required
 def edit_profile(request):
     profile, created = UserProfile.objects.get_or_create(user=request.user)
 

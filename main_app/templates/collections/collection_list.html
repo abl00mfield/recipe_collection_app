@@ -27,14 +27,21 @@
         
         <h3>{{ collection.name }}</h3>
         <div class="recipe-thumb-container">
-            {% if collection.recipes.first and collection.recipes.first.photo %}
-              <img 
+            {% if collection.cover_recipe and collection.cover_recipe.photo %}
+            <img 
+                src="{{ collection.cover_recipe.photo.url }}" 
+                alt="{{ collection.cover_recipe.title }}" 
+                class="recipe-thumb"
+            />
+            {% elif collection.recipes.first and collection.recipes.first.photo %}
+            <img 
                 src="{{ collection.recipes.first.photo.url }}" 
                 alt="{{ collection.recipes.first.title }}" 
                 class="recipe-thumb"
-              />
+            />
+              
             {% else %}
-              <img 
+            <img 
                 src="{% static 'img/default_recipe.jpg' %}" 
                 alt="Default recipe image" 
                 class="recipe-thumb"
