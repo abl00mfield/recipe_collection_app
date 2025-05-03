@@ -1,49 +1,158 @@
-.recipe-grid {
+.recipe-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
   justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .recipe-card {
-  width: 200px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: space-between;
+  width: 250px;
+  /* max-height: 350px; */
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 8px;
   padding: 1rem;
   text-align: center;
-  background: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
   text-decoration: none;
   color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.recipe-card:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* .recipe-card img {
+  width: 200px;
+  height: 200px;
+  border-radius: 6px;
+  object-fit: cover;
+} */
+
+.recipe-thumb-container {
+  /* overflow: hidden; */
+  width: 100%;
+  height: 200px;
+  border-radius: 6px;
+  object-fit: cover;
 }
 
 .recipe-thumb {
   width: 100%;
-  height: 150px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 4px;
-  margin-bottom: 0.5rem;
+  transition: transform 0.4s ease;
+}
+
+.delete-form {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease 0.1s;
+}
+
+.delete-icon {
+  background: transparent;
+  border: none;
+  color: var(--color-rust-red);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.3rem;
+  transition: color 0.2s ease;
+}
+
+.delete-icon i {
+  color: var(--color-rust-red);
+  transition: color 0.2s ease;
+}
+
+.recipe-card:hover .delete-form {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.delete-icon:hover i {
+  color: var(--color-danger-hover);
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .set-cover-form {
   margin-top: 0.5rem;
+  text-align: center;
 }
 
-.cover-icon {
-  background: transparent;
-  border: none;
-  color: #555;
-  font-size: 1.2rem;
+.cover-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.set-cover-btn {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  background-color: var(--color-coral-orange);
+  color: black;
+  border-radius: 4px;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: background-color 0.3s ease;
+  border: none;
 }
 
-.cover-icon:hover {
-  color: #5a67d8;
+.set-cover-btn:hover {
+  background-color: #f7c195;
 }
 
-.cover-icon.selected {
-  color: #5a67d8;
-  font-weight: bold;
+.selected {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  background-color: var(--color-sand-yellow);
+  color: var(--color-text);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
   cursor: default;
+  border: none;
+}
+
+/* .remove-btn {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  background-color: var(--color-rust-red);
+  color: var(--color-white);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+.remove-btn:hover {
+  background-color: var(--color-danger-hover);
+} */
+
+@media (max-width: 768px) {
+  .recipe-card {
+    width: 350px;
+  }
+  .recipe-thumb-container {
+    width: 300px;
+    height: 300px;
+  }
 }

@@ -13,7 +13,7 @@ form {
 }
 
 form p {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 label {
@@ -21,6 +21,10 @@ label {
   margin-bottom: 0.5rem;
   font-weight: bold;
   color: #333;
+}
+
+input[type="file"] {
+  font-family: "Lato", sans-serif;
 }
 
 input[type="text"],
@@ -37,13 +41,25 @@ select {
   font-size: 1rem;
 }
 
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-help {
+  display: block;
+  margin-top: -0.25rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
 textarea {
   resize: vertical;
 }
 
 button,
 input[type="submit"] {
-  background-color: #5a67d8;
+  background-color: var(--color-teal-green);
   color: white;
   padding: 0.75rem 1.5rem;
   border: none;
@@ -56,7 +72,7 @@ input[type="submit"] {
 
 button:hover,
 input[type="submit"]:hover {
-  background-color: #434190;
+  background-color: var(--color-teal-green-hover);
 }
 
 .form-error {
@@ -93,4 +109,46 @@ input[type="submit"]:hover {
 
 input[type="file"] + span {
   display: none;
+}
+
+@media (max-width: 600px) {
+  form {
+    margin: 1rem;
+    padding: 1rem;
+    max-width: 100%;
+    box-shadow: none;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="url"],
+  textarea,
+  select {
+    font-size: 1rem;
+    padding: 0.65rem;
+  }
+
+  button,
+  input[type="submit"] {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+
+  .photo-preview img.thumbnail {
+    width: 100px;
+    height: 100px;
+  }
+
+  .remove-photo {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
 }

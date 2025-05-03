@@ -2,32 +2,39 @@
 {% load static %}
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'css/recipe-list.css' %}">
+<link rel="stylesheet" href="{% static 'css/collection-detail.css' %}">
 <title>{{ collection.name }}</title>
 {% endblock %}
 
 {% block content %}
-<div class="collection-detail">
-  <h2>{{ collection.name }}</h2>
 
-  {% if collection.recipes.all %}
-    <div class="recipe-list">
-        {% for recipe in collection.recipes.all %}
-        <div class="recipe-card" data-href="{% url 'recipe_detail' recipe.id %}">    
-            <div class="recipe-thumb-container">                    
-                {% if recipe.photo %}
-                <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="recipe-thumb">
-                {% else %}
-                <img src="{% static 'img/default-recipe-thumb.png' %}" alt="Default image" class="recipe-thumb">
-                {% endif %}
-            </div>
-            <h4>{{ recipe.title }}</h4>
-            
-            <form method="POST" action="{% url 'collection_remove_recipe' collection.id recipe.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn danger-btn">Remove</button>
-            </form>
+<h2>{{ collection.name }}</h2>
 
+{% if collection.recipes.all %}
+<div class="recipe-list">
+    {% for recipe in collection.recipes.all %}
+    <div class="recipe-card" data-href="{% url 'recipe_detail' recipe.id %}">    
+        <form 
+            method="POST" 
+            action="{% url 'collection_remove_recipe' collection.id recipe.id %}"
+            class="delete-form"
+            onsubmit="return confirm('Delete this recipe from the "{{collection.name}} " collection?');"
+        >
+        {% csrf_token %}
+            <button type="submit" class="delete-icon" title="Delete Collection" aria-label="Delete Collection">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        </form>
+        <div class="recipe-thumb-container">
+            {% if recipe.photo %}
+            <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="recipe-thumb">
+            {% else %}
+            <img src="{% static 'img/default-recipe-thumb.png' %}" alt="Default image" class="recipe-thumb">
+            {% endif %}           
+        </div>                     
+                  
+        <h4>{{ recipe.title }}</h4>  
+        <div class="cover-items">                     
             <form 
                 method="POST" 
                 action="{% url 'set_collection_cover' collection.id recipe.id %}" 
@@ -35,29 +42,29 @@
             >
                 {% csrf_token %}
                 {% if collection.cover_recipe and collection.cover_recipe.id == recipe.id %}
-                <button type="submit" class="cover-btn selected" title="This is the current cover photo" disabled>
+                <button type="submit" class="selected" title="This is the current cover photo" disabled>
                 Cover photo
                 </button>
                 {% else %}
-                <button type="submit" class="cover-btn" title="Set as cover photo">
+                <button type="submit" class="set-cover-btn" title="Set as cover photo">
                 Set as Cover Photo
                 </button>
                 {% endif %}
-            </form>
-
+            </form>           
         </div>
-      {% endfor %}
     </div>
-    {% if request.user == collection.user %}
+    {% endfor %}
+   
     
-    {% endif %}
-  {% else %}
+    {% else %}
     <p>This collection doesn't have any recipes yet.</p>
-  {% endif %}
-  <div class = "button-container">
+    {% endif %}
+</div>
+
+<div class = "button-container">
     <a href="{% url 'recipe_list' %}?collection_id={{ collection.id }}" class="btn">Add Recipes to This Collection</a>
     <a class = "btn" href="{% url 'collection_update' collection.id %}">Edit</a>
     <a class ="btn danger-btn" href="{% url 'collection_delete' collection.id %}">Delete</a>
 </div>
-</div>
+
 {% endblock %}

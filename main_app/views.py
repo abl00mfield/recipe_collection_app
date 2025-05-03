@@ -72,11 +72,15 @@ class RecipeList(ListView):
         collection_id = self.request.GET.get("collection_id")
         if collection_id and user.is_authenticated:
             try:
-                context["target_collection"] = Collection.objects.get(
-                    id=collection_id, user=user
+                target_collection = Collection.objects.get(id=collection_id, user=user)
+                context["target_collection"] = target_collection
+
+                context["target_collection_recipe_ids"] = set(
+                    target_collection.recipes.values_list("id", flat=True)
                 )
             except Collection.DoesNotExist:
                 context["target_collection"] = None
+                context["target_collection_recipe_ids"] = set()
 
         if user.is_authenticated:
             user_collections = (
@@ -177,7 +181,14 @@ class RecipeDetail(DetailView):
             existing_feedback = Feedback.objects.filter(
                 recipe=recipe, user=user
             ).first()
-            context["user_collections"] = Collection.objects.filter(user=user)
+
+            user_collections = (
+                Collection.objects.filter(user=self.request.user)
+                .prefetch_related("recipes")
+                .order_by("name")
+            )
+
+            context["user_collections"] = user_collections
             context["collections"] = recipe.collections.filter(user=user)
 
             if not existing_feedback:
@@ -348,8 +359,8 @@ def collection_add_recipe(request, recipe_id):
         else:
             messages.info(request, f'"{recipe.title}" is already in this collection.')
 
-        # if next_url:
-        #     return redirect(next_url)
+        if next_url:
+            return redirect(next_url)
 
     return redirect("collection_detail", collection_id=collection.id)
 

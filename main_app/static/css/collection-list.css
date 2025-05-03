@@ -57,7 +57,7 @@ h2 {
 .delete-icon {
   background: transparent;
   border: none;
-  color: #e53e3e;
+  color: var(--color-rust-red);
   font-size: 1.1rem;
   cursor: pointer;
   padding: 0.3rem;
@@ -65,12 +65,12 @@ h2 {
 }
 
 .delete-icon i {
-  color: #e53e3e;
+  color: var(--color-rust-red);
   transition: color 0.2s ease;
 }
 
 .delete-icon:hover i {
-  color: #c53030;
+  color: var(--color-danger-hover);
 }
 
 .collection-card .delete-form {
@@ -82,4 +82,14 @@ h2 {
 .collection-card:hover .delete-form {
   opacity: 1;
   pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  .collection-card {
+    width: 350px;
+  }
+  .recipe-thumb-container {
+    width: 300px;
+    height: 300px;
+  }
 }

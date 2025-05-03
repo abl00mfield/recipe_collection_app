@@ -13,6 +13,7 @@
   <h2>All Recipes</h2>
 {% endif %}
 
+{% if page_title == "All Recipes" %}
 <form method="get" class="filter-form">
     <input type="text" name="q" id="q" placeholder="Search recipes..." value = "{{ search_query }}">
     <label for="sort">Sort by:</label>
@@ -34,7 +35,7 @@
 
     <button class = "btn" type="submit">Search</button>
 </form>
-
+{% endif %}
 
 
 {% if recipes %}
@@ -46,11 +47,15 @@
                 {% csrf_token %}
                 <input type="hidden" value ="{{ target_collection.id }}" name="collection_id">
                 <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                <button class="add-icon" type="submit" title="Add to {{ target_collection.name }}">
-                    {% if recipe.id in saved_recipe_ids %}
-                      <i class="fa-solid fa-bookmark"></i>
+                <button 
+                    class="add-icon plus-mode" 
+                    type="submit" 
+                    {% if recipe.id in target_collection_recipe_ids %} disabled {% endif %}
+                    title="Add to {{ target_collection.name }}">
+                    {% if recipe.id in target_collection_recipe_ids %}
+                      <i class="fa-solid fa-check" title="Already in Collection"></i>
                     {% else %}
-                      <i class="fa-regular fa-bookmark"></i>
+                      <i class="fa-solid fa-plus" title="Add to Collection"></i>
                     {% endif %}
                 </button>
             </form>
