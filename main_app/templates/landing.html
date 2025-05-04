@@ -9,7 +9,7 @@
 <div class="landing-container">
     <h1>Welcome to Recipe Box</h1>
     <p>Discover, create, and share your favorite recipes with the community.</p>
-    <img src = "{% static 'img/salad.jpg' %}" width=400px />
+    <img src = "{% static 'img/salad.jpg' %}" />
     {% if not user.is_authenticated %}
         <div class="landing-buttons">
             <a href="{% url 'signup' %}" class="btn">Get Started</a>
@@ -18,7 +18,9 @@
     {% else %}
     <div class="landing-buttons">
         <a href="{% url 'recipe_list' %}" class="btn">Discover Recipes</a>
-        <a href="{% url 'collection_list' %}" class="btn">Create Collections</a>
+        <a href="{% url 'collection_create' %}" class="btn">Create Collections</a>
+        <a href="{% url 'recipe_create' %}" class="btn">Share a Recipe</a>
+
     </div>
     {% endif %}
 </div>

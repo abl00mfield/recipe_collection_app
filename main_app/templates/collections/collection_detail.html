@@ -10,15 +10,16 @@
 
 <h2>{{ collection.name }}</h2>
 
-{% if collection.recipes.all %}
+
 <div class="recipe-list">
+    {% if collection.recipes.all %}
     {% for recipe in collection.recipes.all %}
     <div class="recipe-card" data-href="{% url 'recipe_detail' recipe.id %}">    
         <form 
             method="POST" 
             action="{% url 'collection_remove_recipe' collection.id recipe.id %}"
             class="delete-form"
-            onsubmit="return confirm('Delete this recipe from the "{{collection.name}} " collection?');"
+            onsubmit="return confirm('Delete this recipe from the collection?');"
         >
         {% csrf_token %}
             <button type="submit" class="delete-icon" title="Delete Collection" aria-label="Delete Collection">

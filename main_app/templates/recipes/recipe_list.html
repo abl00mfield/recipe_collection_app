@@ -51,7 +51,7 @@
                 <button 
                     class="add-icon plus-mode" 
                     type="submit" 
-                    {% if recipe.id in target_collection_recipe_ids %} disabled {% endif %}
+                    {% comment %} {% if recipe.id in target_collection_recipe_ids %} disabled {% endif %} {% endcomment %}
                     title="Add to {{ target_collection.name }}">
                     {% if recipe.id in target_collection_recipe_ids %}
                       <i class="fa-solid fa-check" title="Already in Collection"></i>

@@ -104,7 +104,7 @@ h4 {
 }
 
 .add-icon:hover i {
-  color: var(--color-teal-green);
+  color: var(--color-sand-yellow);
 }
 
 .recipe-card:hover h4 {
@@ -211,14 +211,21 @@ h4 {
 }
 
 .add-icon.plus-mode {
-  background-color: var(--color-sand-yellow);
+  /* background-color: var(--color-sand-yellow);
+  color: black; */
   color: black;
-  transition: background-color 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .add-icon.plus-mode:hover {
-  background-color: var(--color-coral-orange);
-  color: white;
+  color: var(--color-sand-yellow);
+  transform: scale(1.5);
+}
+
+.author {
+  font-size: 0.9rem;
+  color: rgb(123, 117, 117);
+  font-style: italic;
 }
 
 .reset {

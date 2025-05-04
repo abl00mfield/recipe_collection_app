@@ -6,6 +6,11 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  text-align: center;
+}
+
+.recipe-list p {
+  text-align: center;
 }
 
 .recipe-card {
@@ -15,7 +20,6 @@
   gap: 0.5rem;
   justify-content: space-between;
   width: 250px;
-  /* max-height: 350px; */
   background-color: #f9f9f9;
   border: 1px solid #eee;
   border-radius: 8px;
