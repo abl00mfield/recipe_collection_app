@@ -34,6 +34,7 @@
     </select>
 
     <button class = "btn" type="submit">Search</button>
+    <a href="{% url 'recipe_list' %}" class="reset btn">Reset</a>
 </form>
 {% endif %}
 
@@ -109,8 +110,8 @@
             </div>  
                            
 
-            <h3>{{ recipe.title }}</h3>
-            <p>by {{ recipe.author.username }}</p>
+            <h4>{{ recipe.title }}</h4>
+            <p class="author">by {{ recipe.author.username }}</p>
             <p>{{ recipe.description|truncatewords:15 }}</p>
 
         </div>

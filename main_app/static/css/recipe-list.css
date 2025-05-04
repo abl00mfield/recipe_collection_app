@@ -1,12 +1,5 @@
-h2 {
-  margin-bottom: 1.5rem;
-}
-h3 {
-  padding: 1rem;
-}
-p {
-  padding: 0.5rem;
-  text-align: center;
+h4 {
+  margin-bottom: 0;
 }
 
 .recipe-list {
@@ -20,13 +13,20 @@ p {
 }
 
 .recipe-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  align-items: center;
   position: relative;
   cursor: pointer;
   width: 250px;
+  max-height: 450px;
+  overflow: hidden;
   background-color: #f9f9f9;
   border: 1px solid #eee;
   border-radius: 8px;
-  padding: 1rem;
+  padding: 1.5rem;
   text-align: center;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
   color: inherit;
@@ -61,19 +61,19 @@ p {
   position: absolute;
   top: 0.25rem;
   right: 0.25rem;
-  background-color: var(--color-card-bg);
+  background-color: transparent;
   border: none;
-  border-radius: 50%;
+  /* border-radius: 50%; */
   font-size: 1.2rem;
   cursor: pointer;
-  padding: 0.25rem 0.4rem;
+  /* padding: 0.25rem 0.4rem; */
   z-index: 10;
 }
 
 .collection-dropdown-wrapper {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: 0;
+  right: 0;
 }
 
 .modal-btn {
@@ -83,7 +83,7 @@ p {
 
 .collection-dropdown {
   position: absolute;
-  top: 2rem;
+  top: 1rem;
   right: 0;
   background: transparent;
   padding: 0.5rem;
@@ -107,7 +107,7 @@ p {
   color: var(--color-teal-green);
 }
 
-.recipe-card:hover h3 {
+.recipe-card:hover h4 {
   color: var(--color-teal-green);
 }
 
@@ -179,7 +179,7 @@ p {
   gap: 1rem;
   justify-content: center;
   align-items: center;
-  margin-bottom: 2rem;
+  /* margin-bottom: 1rem; */
 }
 
 .filter-form label {
@@ -195,35 +195,6 @@ p {
   padding: 0.5rem;
   border-radius: 5px;
   border: 1px solid #ccc;
-}
-
-.set-cover-form {
-  margin-top: 0.5rem;
-  text-align: center;
-}
-
-.cover-btn {
-  padding: 0.4rem 0.75rem;
-  font-size: 0.85rem;
-  background-color: var(--color-teal-green);
-  color: var(--color-white);
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.cover-btn:hover {
-  background-color: var(--color-teal-green-hover);
-}
-
-.selected {
-  background-color: var(--color-coral-orange);
-  color: var(--color-white);
-  cursor: default;
-  border: none;
-}
-.selected:hover {
-  background-color: var(--color-coral-orange);
 }
 
 .recipe-card .add-icon {
@@ -248,4 +219,20 @@ p {
 .add-icon.plus-mode:hover {
   background-color: var(--color-coral-orange);
   color: white;
+}
+
+.reset {
+  background-color: var(--color-coral-orange);
+  color: white;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  line-height: normal;
+}
+
+.reset:hover {
+  background-color: #f2c198;
 }
