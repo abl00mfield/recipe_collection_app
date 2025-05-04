@@ -93,21 +93,46 @@ nav {
   color: var(--color-white);
 }
 
-nav ul {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  padding: 1rem;
+nav a {
+  color: var(--color-white);
 }
 
 nav a:hover {
   color: var(--color-sand-yellow);
 }
 
-nav a {
-  color: var(--color-white);
+.nav-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  /* max-width: 1200px; */
+  width: 100%;
+  margin: 0 auto;
 }
+
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: white;
+  cursor: pointer;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+}
+
+/* nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1rem;
+} */
 
 .landing-container {
   display: flex;
@@ -137,17 +162,21 @@ nav a {
   max-width: 600px;
 }
 
-.landing-buttons .btn {
+.btn {
   display: inline-block;
   padding: 0.75rem 1rem;
   font-size: 1rem;
   font-weight: bold;
-  background-color: var(--color-dark-teal);
+  background-color: var(--color-teal-green);
   color: var(--color-white);
   border-radius: 5px;
   text-decoration: none;
   transition: background-color 0.3s ease;
   font-family: "Lato", sans-serif;
+}
+
+.landing-buttons .btn {
+  background-color: var(--color-dark-teal);
 }
 
 .btn:hover {
@@ -255,6 +284,44 @@ footer {
   to {
     opacity: 0;
     transform: translateY(-10px);
+  }
+}
+
+@media (max-width: 920px) {
+  .nav-links {
+    font-size: 0.9rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+  .nav-container {
+    justify-content: flex-start;
+    padding: 0 0 0 0.5rem;
+  }
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background-color: var(--color-dark-teal);
+    width: 100%;
+    padding: 1rem;
+    position: absolute;
+    top: 45px;
+    left: 0;
+    z-index: 1000;
+    gap: 0;
+  }
+
+  .nav-links.show-nav {
+    display: flex;
+  }
+
+  .nav-links li {
+    text-align: left;
+    padding: 0.5rem 0;
   }
 }
 

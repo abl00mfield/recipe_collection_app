@@ -6,6 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">  
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="icon" href="{% static 'img/dinner.png' %}" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script defer src="{% static 'js/main.js' %}"></script>
   {% block head %}
@@ -15,22 +16,29 @@
 <body>
 
   <nav>
-    <ul>
-      <li><a href="{% url 'landing' %}">Home</a></li>
-      <li><a href="{% url 'recipe_list' %}">Recipes</a></li>
-      {% if user.is_authenticated %}
-      <li><a href="{% url 'user_recipe_list' %}">My Recipes</a></li>
-      <li><a href="{% url 'collection_list' %}">My Collections</a></li>
-      <li><a href="{% url 'recipe_create' %}">Add a New Recipe</a></li>
-      <li><a href="{% url 'collection_create' %}">Add a New Collection</a></li>
-      <li><a href="{% url 'profile' %}">Profile</a></li>
-      <li><a href="{% url 'signout' %}">Sign Out</a></li>
-      {% else %}
-      <li><a href="{% url 'signin' %}">Sign In</a></li>
-      <li><a href="{% url 'signup' %}">Sign Up</a></li>
-      {% endif %}
-    </ul>
+    <div class="nav-container">
+      <div class="hamburger" id="hamburger">
+        <i class="fas fa-bars"></i>
+      </div>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="{% url 'landing' %}">Home</a></li>
+        <li><a href="{% url 'recipe_list' %}">Recipes</a></li>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'user_recipe_list' %}">My Recipes</a></li>
+        <li><a href="{% url 'collection_list' %}">My Collections</a></li>
+        <li><a href="{% url 'recipe_create' %}">Add a New Recipe</a></li>
+        <li><a href="{% url 'collection_create' %}">Add a New Collection</a></li>
+        <li><a href="{% url 'profile' %}">Profile</a></li>
+        <li><a href="{% url 'signout' %}">Sign Out</a></li>
+        {% else %}
+        <li><a href="{% url 'signin' %}">Sign In</a></li>
+        <li><a href="{% url 'signup' %}">Sign Up</a></li>
+        {% endif %}
+      </ul>
+    </div>
   </nav>
+
+
   <div id="toast-container" class="toast-container">
     {% for message in messages %}
       <div class="toast {{ message.tags }}">
@@ -47,9 +55,10 @@
   <footer>
     <p>&copy; 2025 Recipe Box App</p>
 
-    <small><p>Default image <a href="http://www.freepik.com">designed by macrovector / Freepik</a></p></small>
-    <small><p>Landing page photo by <a href="https://unsplash.com/@annapelzer?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Anna Pelzer</a> on <a href="https://unsplash.com/photos/bowl-of-vegetable-salads-IGfIGP5ONV0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a></p></small>
-      
+    <small>Default image <a href="http://www.freepik.com">designed by macrovector / Freepik</a></small>
+    <small>Landing page photo by <a href="https://unsplash.com/@annapelzer?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Anna Pelzer</a> on <a href="https://unsplash.com/photos/bowl-of-vegetable-salads-IGfIGP5ONV0?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a></small>
+    <small>Favicon by <a href="https://www.flaticon.com/free-icons/dinner" title="dinner icons">Freepik - Flaticon</a></small>      
+    
   </footer>
 
   <div id="loading-overlay" class="hidden">
