@@ -179,6 +179,7 @@ h4 {
   gap: 1rem;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   /* margin-bottom: 1rem; */
 }
 
@@ -242,4 +243,15 @@ h4 {
 
 .reset:hover {
   background-color: #f2c198;
+}
+
+@media (max-width: 600px) {
+  .recipe-card {
+    width: 350px;
+    max-height: 500px;
+  }
+
+  .recipe-thumb-container {
+    height: 300px;
+  }
 }
