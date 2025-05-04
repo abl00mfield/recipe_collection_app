@@ -15,7 +15,7 @@ class Tag(models.Model):
 
 class Recipe(models.Model):
     title = models.CharField(max_length=255)
-    source = models.URLField(blank=True, null=True)
+    source = models.URLField(blank=True, null=True, help_text="Must be a valid URL")
     description = models.TextField()
     ingredients = models.TextField()
     instructions = models.TextField()
@@ -23,7 +23,7 @@ class Recipe(models.Model):
     photo_credit = models.CharField(
         max_length=255,
         blank=True,
-        help_text="Optional: Credit the source or owner of the photo",
+        help_text="Credit the source or owner of the photo",
     )
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipes")
     tags = models.ManyToManyField(Tag, blank=True, related_name="recipes")
