@@ -19,6 +19,7 @@
   flex-direction: column;
   gap: 0.5rem;
   justify-content: space-between;
+  align-items: center;
   width: 250px;
   background-color: #f9f9f9;
   border: 1px solid #eee;

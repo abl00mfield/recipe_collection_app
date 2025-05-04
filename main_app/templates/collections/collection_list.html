@@ -9,8 +9,9 @@
 {% block content %}
 <h2>Your Collections</h2>
 
-{% if collections %}
+
 <div class="collection-list">
+    {% if collections %}
     {% for collection in collections%}
     <div class="collection-card" data-href="{% url 'collection_detail' collection.id %}" >
         <form 
@@ -50,10 +51,10 @@
         </div>
     </div>
     {% endfor %}
-</div>
+
 {% else %}
     <p>No collections yet. </p>
 {% endif %}
-
+</div>
 {% endblock %}
 
