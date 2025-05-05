@@ -47,8 +47,11 @@ class RecipeForm(forms.ModelForm):
         self.fields["photo"].widget.template_name = "widgets/clearable_file_input.html"
         # pre fill custom tags if editing
         if self.instance.pk:
-            exisiting_tags = self.instance.tags.values_list("name", flat=True)
-            self.fields["custom_tags"].initial = " ".join(exisiting_tags)
+            existing_tags = self.instance.tags.values_list("name", flat=True)
+            formatted_tags = [
+                f'"{tag}"' if " " in tag else tag for tag in existing_tags
+            ]
+            self.fields["custom_tags"].initial = " ".join(formatted_tags)
 
         if self.instance and self.instance.pk and self.instance.photo:
             self.fields["photo"].widget.attrs.update(
