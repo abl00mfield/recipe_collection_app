@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.db import models
 from django.db.models import Q
 from django.db import IntegrityError
+from django.http import QueryDict
 
 from django.views.generic import (
     ListView,
@@ -70,6 +71,12 @@ class RecipeList(ListView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         context["page_title"] = "All Recipes"
+
+        # Clean the querystring for pagination links (remove page param)
+        querydict = self.request.GET.copy()
+        querydict.pop("page", None)
+        context["querystring"] = querydict.urlencode()
+
         collection_id = self.request.GET.get("collection_id")
         if collection_id and user.is_authenticated:
             try:

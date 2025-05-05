@@ -119,23 +119,21 @@
         {% endfor %}
     </div>
 
-    {% if is_paginated %}
-    {% with querystring=request.GET.urlencode %}
-    <div class="pagination">
-      {% if page_obj.has_previous %}
-        <a href="?page=1&{{ querystring }}">First</a>
-        <a href="?page={{ page_obj.previous_page_number }}&{{ querystring }}">Previous</a>
-      {% endif %}
-
-      <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-
-      {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}&{{ querystring }}">Next</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}&{{ querystring }}">Last</a>
-      {% endif %}
-    </div>
-    {% endwith %}
+  {% if is_paginated %}
+  <div class="pagination">
+    {% if page_obj.has_previous %}
+      <a href="?page=1{% if querystring %}&{{ querystring }}{% endif %}">First</a>
+      <a href="?page={{ page_obj.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">Previous</a>
     {% endif %}
+
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">Next</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}{% if querystring %}&{{ querystring }}{% endif %}">Last</a>
+    {% endif %}
+  </div>
+  {% endif %}
     
 {% else %}
 <div class="no-recipes">
