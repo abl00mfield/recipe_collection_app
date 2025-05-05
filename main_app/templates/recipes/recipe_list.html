@@ -143,6 +143,7 @@
         <p>No recipes match your search or filters.  Try adjusting your criteria</p>
     {% else %}
         <p>No recipes yet. Be the first to add one!</p>
+        <a href="{% url 'recipe_create' %}" class = "btn">Add a Recipe</a>
     {% endif %}
 {% endif %}
 </div>
