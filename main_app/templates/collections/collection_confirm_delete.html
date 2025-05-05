@@ -9,9 +9,12 @@
 
 {% block content %}
   <h2>Are you sure you want to delete the "{{ collection.name  }} collection"?</h2>
+
   <form method="POST">
     {% csrf_token %}
-    <button class = "btn" type="submit">Yes, delete</button>
-    <a class = "btn" href="{% url 'collection_detail' collection.id %}">Cancel</a>
+    <div class="button-container">
+      <button class = "btn" type="submit">Yes, delete</button>
+      <a class = "btn" href="{% url 'collection_detail' collection.id %}">Cancel</a>
+    </div>
   </form>
 {% endblock %}

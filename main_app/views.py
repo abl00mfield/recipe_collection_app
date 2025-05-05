@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import models
 from django.db.models import Q
+from django.db import IntegrityError
 
 from django.views.generic import (
     ListView,
@@ -63,7 +64,7 @@ class RecipeList(ListView):
     template_name = "recipes/recipe_list.html"
     context_object_name = "recipes"
     # ordering = ["-created_at"]
-    paginate_by = 20
+    paginate_by = 15
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -305,8 +306,15 @@ class CollectionCreate(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        messages.success(self.request, "Collection created successfully!")
-        return super().form_valid(form)
+
+        # check if the collection already exists for the user
+        try:
+            response = super().form_valid(form)
+            messages.success(self.request, "Collection created successfully!")
+            return response
+        except IntegrityError:
+            form.add_error("name", "You already have a collection with this name.")
+            return self.form_invalid(form)
 
 
 class CollectionUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -320,8 +328,13 @@ class CollectionUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user == collection.user
 
     def form_valid(self, form):
-        messages.success(self.request, "Collection updated!")
-        return super().form_valid(form)
+        form.instance.user = self.request.user
+        try:
+            messages.success(self.request, "Collection updated successfully!")
+            return super().form_valid(form)
+        except IntegrityError:
+            form.add_error("name", "You already have a collection with this name.")
+            return self.form_invalid(form)
 
 
 class CollectionDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -370,18 +383,34 @@ def create_collection_inline(request):
     if request.method == "POST":
         name = request.POST.get("name")
         recipe_id = request.POST.get("recipe_id")
+        collection = None
+
         if name:
-            collection = Collection.objects.create(name=name, user=request.user)
-            if recipe_id:
+            try:
+                collection = Collection.objects.create(name=name, user=request.user)
+                messages.success(request, f"Collection '{name}' created!")
+            except IntegrityError:
+                collection = Collection.objects.filter(
+                    name__iexact=name.title(), user=request.user
+                ).first()
+                messages.info(
+                    request, f"You already have a collection named '{collection.name}'."
+                )
+                return redirect("recipe_list")
+
+            # Add recipe to collection if provided
+            if recipe_id and collection:
                 recipe = get_object_or_404(Recipe, id=recipe_id)
-                collection.recipes.add(recipe)
-            messages.success(request, f"Collection '{name}' created!")
+                if recipe not in collection.recipes.all():
+                    collection.recipes.add(recipe)
+
         else:
             messages.error(request, "Collection name is required")
-    if collection:
-        return redirect("collection_detail", collection_id=collection.id)
-    else:
-        return redirect("recipe_list")
+
+        if collection:
+            return redirect("collection_detail", collection_id=collection.id)
+
+    return redirect("recipe_list")
 
 
 @login_required

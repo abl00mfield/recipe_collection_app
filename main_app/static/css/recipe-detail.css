@@ -80,6 +80,10 @@
   margin: 0;
 }
 
+.button-container {
+  justify-content: flex-start;
+}
+
 .instruction-list,
 .ingredient-list,
 .button-container,

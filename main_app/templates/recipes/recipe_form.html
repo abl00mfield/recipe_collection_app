@@ -17,9 +17,11 @@
     <h2>Create a New Recipe</h2>
     {% endif %}
     <form 
-    method="POST" 
-    enctype="multipart/form-data" 
-    data-loading-message="{% if object %}Updating your recipe...{% else %}Creating your recipe...{% endif %}">
+      method="POST" 
+      enctype="multipart/form-data" 
+      data-loading-message="{% if object %}Updating your recipe...{% else %}Creating your recipe...{% endif %}"
+      autocomplete="off"
+    >
     
     {% csrf_token %}
 

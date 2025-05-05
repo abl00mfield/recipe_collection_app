@@ -79,6 +79,7 @@
                             class = "collection-select" 
                             data-recipe-id="{{ recipe.id}}" 
                             required
+                            {% comment %} onchange="this.form.submit()" {% endcomment %}
                         >
                             <option value="" disabled selected>Select collection</option>
                             {% for collection in user_collections %}
@@ -94,7 +95,7 @@
                             {% endfor %}
                             <option value="__new__">+ New Collection</option>
                         </select>
-                        <button type="submit" class="modal-btn">Add</button>
+                        {% comment %} <button type="submit" class="modal-btn">Add</button> {% endcomment %}
                     </form>            
                 </div>
                 {% endif %}    
@@ -134,21 +135,23 @@
     {% endif %}
     
 {% else %}
+<div class="no-recipes">
     {% if request.GET.q or request.GET.tag or request.GET.sort %}
         <p>No recipes match your search or filters.  Try adjusting your criteria</p>
     {% else %}
         <p>No recipes yet. Be the first to add one!</p>
     {% endif %}
 {% endif %}
+</div>
 
 
 
 <div id="new-collection-modal" class="modal-overlay hidden">
     <div class="modal-content">
-      <form method="POST" action="{% url 'collection_create_inline' %}">
+      <form method="POST" action="{% url 'collection_create_inline' %}" autocomplete="off">
         {% csrf_token %}
         <label for="new-collection-name">New collection name:</label>
-        <input type="text" id="new-collection-name" name="name" required>
+        <input type="text" id="new-collection-name" name="name" required autocomplete="off">
         <input type="hidden" id="new-collection-recipe-id" name="recipe_id">
         <div class="modal-buttons">
           <button type="submit" class="btn">Create</button>

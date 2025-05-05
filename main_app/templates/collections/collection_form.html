@@ -15,7 +15,7 @@
 <h2>Create a New Collection</h2>
 
 {% endif %}
-  <form method="POST" enctype="multipart/form-data" data-loading-message="Creating your collection...">
+  <form method="POST" enctype="multipart/form-data" data-loading-message="Creating your collection..." autocomplete="off">
     {% csrf_token %}
     {{ form.as_p }}
     {% if object %}

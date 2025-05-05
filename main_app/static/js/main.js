@@ -36,6 +36,8 @@ document.addEventListener("DOMContentLoaded", function () {
         recipeInput.value = select.dataset.recipeId;
         // Reset the select so it doesn't stay on "+ New Collection"
         select.selectedIndex = 0;
+      } else {
+        select.closest("form").submit();
       }
     });
   });

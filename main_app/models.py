@@ -59,6 +59,13 @@ class Collection(models.Model):
         help_text="Recipe used as cover image for this collection",
     )
 
+    def save(self, *args, **kwargs):
+        self.name = self.name.strip().title()
+        super().save(*args, **kwargs)
+
+    class Meta:
+        unique_together = ("name", "user")
+
     def get_absolute_url(self):
         return reverse("collection_detail", kwargs={"collection_id": self.pk})
 

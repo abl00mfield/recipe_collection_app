@@ -1,5 +1,6 @@
 h4 {
   margin-bottom: 0;
+  font-weight: bold;
 }
 
 .recipe-list {
@@ -220,13 +221,18 @@ h4 {
 
 .add-icon.plus-mode:hover {
   color: var(--color-sand-yellow);
-  transform: scale(1.5);
+  /* transform: scale(1.5); */
 }
 
 .author {
   font-size: 0.9rem;
   color: rgb(123, 117, 117);
   font-style: italic;
+}
+
+.no-recipes {
+  text-align: center;
+  margin: 1rem;
 }
 
 .reset {

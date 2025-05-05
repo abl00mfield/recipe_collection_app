@@ -20,7 +20,7 @@ class RecipeForm(forms.ModelForm):
     custom_tags = forms.CharField(
         max_length=255,
         required=False,
-        help_text="Enter tags separated by spaces (e.g dessert pie chocolate)",
+        help_text='Enter tags separated by spaces, multi word tags in quotes (e.g dessert chocolate "peanut butter")',
     )
 
     class Meta:
@@ -69,12 +69,18 @@ class RecipeForm(forms.ModelForm):
 
     def clean_custom_tags(self):
         tag_string = self.cleaned_data.get("custom_tags", "").strip().lower()
-        raw_tags = tag_string.split()
+        # Split on spaces except within quotes
+        raw_tags = re.findall(r'"(.*?)"|(\S+)', tag_string)
 
-        # clean data - remove foriegn characters
-        tag_names = [
-            re.sub(r"[^a-z]", "", tag) for tag in raw_tags if re.sub(r"[^a-z]", "", tag)
-        ]
+        # Flatten the list of tuples from re.findall
+        flat_tags = [tag[0] or tag[1] for tag in raw_tags]
+
+        # clean data - remove foreign characters
+        tag_names = []
+        for tag in flat_tags:
+            cleaned = re.sub(r"[^a-z0-9\- ]", "", tag)  # allow a-z, 0–9, dash, space
+            if cleaned:
+                tag_names.append(cleaned)
 
         return list(set(tag_names))
 
