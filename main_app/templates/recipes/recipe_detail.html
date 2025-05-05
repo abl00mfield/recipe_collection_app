@@ -114,7 +114,11 @@
         <a class ="btn danger-btn" href="{% url 'recipe_delete' recipe.id %}">Delete</a>
     </div>
     {% endif %}
-    <h3>Average Rating: {{ average_score }} / 5</h3>
+    {% if total_ratings > 0 %}
+    <h3>Average Rating: {{ average_score }} / 5 ({{ total_ratings }} rating{{ total_ratings|pluralize }})</h3>
+    {% else %}
+    <h3>No ratings yet.</h3>
+    {% endif %}
     
     {% if user.is_authenticated %}
     <form method="POST">

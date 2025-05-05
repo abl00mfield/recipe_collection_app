@@ -207,8 +207,11 @@ class RecipeDetail(DetailView):
             context["feedback_form"] = None
 
         context["feedbacks"] = recipe.feedbacks.select_related("user")
-        avg = recipe.feedbacks.aggregate(models.Avg("score"))["score__avg"]
+        feedbacks = recipe.feedbacks.all()
+        avg = feedbacks.aggregate(models.Avg("score"))["score__avg"]
+        total_ratings = feedbacks.count()
         context["average_score"] = round(avg or 0, 1)
+        context["total_ratings"] = total_ratings
 
         return context
 
