@@ -235,6 +235,11 @@ h4 {
   margin: 1rem;
 }
 
+.no-recipes p,
+.no-recipes .btn {
+  margin: 1rem;
+}
+
 .reset {
   background-color: var(--color-coral-orange);
   color: white;
