@@ -21,6 +21,8 @@
       <option value="-created_at" {% if selected_sort == "-created_at" %}selected{% endif %}>Most Recent</option>
       <option value="title" {% if selected_sort == "title" %}selected{% endif %}>A–Z</option>
       <option value="-title" {% if selected_sort == "-title" %}selected{% endif %}>Z–A</option>
+      <option value="most_popular" {% if selected_sort == "most_popular" %} selected {% endif %}> Most Popular (Avg Rating)</option>
+      <option value="most_rated" {% if selected_sort == "most_rated" %} selected {% endif %}> Most Rated (# Ratings)</option>
     </select>
   
     <label for="tag">Filter by tag:</label>

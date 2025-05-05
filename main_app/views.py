@@ -4,10 +4,10 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.db import models
-from django.db.models import Q
-from django.db import IntegrityError
-from django.http import QueryDict
+from django.db import models, IntegrityError
+from django.db.models import Q, Avg, Count
+from django.db.models.functions import Coalesce
+
 
 from django.views.generic import (
     ListView,
@@ -112,7 +112,10 @@ class RecipeList(ListView):
         return context
 
     def get_queryset(self):
-        queryset = Recipe.objects.all()
+        queryset = Recipe.objects.all().annotate(
+            avg_rating=Coalesce(Avg("feedbacks__score"), 0.0),
+            num_ratings=Count("feedbacks", filter=Q(feedbacks__score__isnull=False)),
+        )
 
         # filter by tag
         tag_name = self.request.GET.get("tag")
@@ -139,6 +142,10 @@ class RecipeList(ListView):
             queryset = queryset.order_by("title")
         elif sort == "-title":
             queryset = queryset.order_by("-title")
+        elif sort == "most_popular":
+            queryset = queryset.order_by("-avg_rating", "-created_at")
+        elif sort == "most_rated":
+            queryset = queryset.order_by("-num_ratings", "-created_at")
         else:
             queryset = queryset.order_by("-created_at")
 
