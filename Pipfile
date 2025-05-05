@@ -12,6 +12,7 @@ pillow = "*"
 whitenoise = "*"
 gunicorn = "*"
 dj-database-url = "*"
+dotenv = "*"
 
 [dev-packages]
 
