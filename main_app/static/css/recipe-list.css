@@ -22,8 +22,8 @@ h4 {
   position: relative;
   cursor: pointer;
   width: 250px;
-  max-height: 450px;
-  overflow: hidden;
+  /* max-height: 450px; */
+  /* overflow: hidden; */
   background-color: #f9f9f9;
   border: 1px solid #eee;
   border-radius: 8px;
@@ -56,6 +56,10 @@ h4 {
   height: 200px;
   border-radius: 6px;
   position: relative;
+}
+
+.description {
+  line-height: 1;
 }
 
 .add-icon {
@@ -132,6 +136,9 @@ h4 {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   width: 90%;
   max-width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn {

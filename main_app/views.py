@@ -388,7 +388,7 @@ def create_collection_inline(request):
         if name:
             try:
                 collection = Collection.objects.create(name=name, user=request.user)
-                messages.success(request, f"Collection '{name}' created!")
+                messages.success(request, f"Collection {name} created!")
             except IntegrityError:
                 collection = Collection.objects.filter(
                     name__iexact=name.title(), user=request.user
@@ -402,6 +402,7 @@ def create_collection_inline(request):
             if recipe_id and collection:
                 recipe = get_object_or_404(Recipe, id=recipe_id)
                 if recipe not in collection.recipes.all():
+                    messages.success(request, f"{recipe.title} added!")
                     collection.recipes.add(recipe)
 
         else:

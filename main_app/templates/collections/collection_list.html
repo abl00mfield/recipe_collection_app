@@ -53,7 +53,11 @@
     {% endfor %}
 
 {% else %}
-    <p>No collections yet. </p>
+    <div class="no-collections">
+    <p>No collections yet. Add one now!</p>
+   
+    <a class = "btn" href="{% url 'collection_create' %}"> Add a New Collection</a>
+    </div>
 {% endif %}
 </div>
 {% endblock %}
