@@ -118,20 +118,23 @@
         </div>
         {% endfor %}
     </div>
+
     {% if is_paginated %}
+    {% with querystring=request.GET.urlencode %}
     <div class="pagination">
-        {% if page_obj.has_previous %}
-        <a href="?page=1">First</a>
-        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        {% endif %}
+      {% if page_obj.has_previous %}
+        <a href="?page=1&{{ querystring }}">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}&{{ querystring }}">Previous</a>
+      {% endif %}
 
-        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
 
-        {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">Next</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-        {% endif %}
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&{{ querystring }}">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}&{{ querystring }}">Last</a>
+      {% endif %}
     </div>
+    {% endwith %}
     {% endif %}
     
 {% else %}
