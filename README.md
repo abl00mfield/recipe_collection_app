@@ -45,7 +45,7 @@
 
   - View all user-submitted recipes
   - Search by title, description & ingredients
-  - Sort alphabetically or by recency
+  - Sort alphabetically, most recent, most reviewed, most popular
   - Filter by tags
 
 - **Feedback System**
@@ -114,8 +114,10 @@
 ## 🧪 Future Enhancements
 
 - Social features (e.g. share collections with friends)
+- A community page with links to user profiles
 - Quick recipe import
 - Improved accessibility (ARIA support, keyboard nav)
+- Improved mobile navigation
 - RESTful API for mobile clients
 
 ---
