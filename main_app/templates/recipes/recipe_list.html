@@ -65,8 +65,7 @@
                 <input type="hidden" name="next" value="{{ request.get_full_path }}">
                 <button 
                     class="add-icon plus-mode" 
-                    type="submit" 
-                    {% comment %} {% if recipe.id in target_collection_recipe_ids %} disabled {% endif %} {% endcomment %}
+                    type="submit"                     
                     title="Add to {{ target_collection.name }}">
                     {% if recipe.id in target_collection_recipe_ids %}
                       <i class="fa-solid fa-check" title="Already in Collection"></i>
@@ -107,8 +106,7 @@
                                 {% endif %}
                             {% endfor %}
                             <option value="__new__">+ New Collection</option>
-                        </select>
-                        {% comment %} <button type="submit" class="modal-btn">Add</button> {% endcomment %}
+                        </select>                        
                     </form>            
                 </div>
                 {% endif %}    
@@ -178,5 +176,4 @@
 
 {% endblock %}
 
-<!-- templates/registration/login.html -->
 
