@@ -14,7 +14,7 @@ export function initPageLoadSpinner() {
       !link.getAttribute("href").startsWith("#") &&
       !link.classList.contains("no-spinner")
     ) {
-      overlay.querySelector("p").textContent = "Loading recipes...";
+      overlay.querySelector("p").textContent = "Loading...";
       overlay.classList.remove("hidden");
     }
   });
