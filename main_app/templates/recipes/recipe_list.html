@@ -15,31 +15,40 @@
 
 {% if page_title == "All Recipes" %}
 <form method="get" class="filter-form">
-    <input type="text" name="q" id="q" placeholder="Search recipes..." value = "{{ search_query }}">
+    <div class="form-group">
+      <label for="q">Search: </label>
+      <input type="text" name="q" id="q" placeholder="Search recipes..." value = "{{ search_query }}">
+    </div>
     {% if target_collection %}
     <input type="hidden" name="collection_id" value="{{ target_collection.id }}">
     {% endif %}
-    <label for="sort">Sort by:</label>
-    <select name="sort" id="sort" onchange="this.form.submit()">
-      <option value="-created_at" {% if selected_sort == "-created_at" %}selected{% endif %}>Most Recent</option>
-      <option value="title" {% if selected_sort == "title" %}selected{% endif %}>A–Z</option>
-      <option value="-title" {% if selected_sort == "-title" %}selected{% endif %}>Z–A</option>
-      <option value="most_popular" {% if selected_sort == "most_popular" %} selected {% endif %}> Most Popular (Avg Rating)</option>
-      <option value="most_rated" {% if selected_sort == "most_rated" %} selected {% endif %}> Most Rated (# Ratings)</option>
-    </select>
+    <div class="form-group">
+      <label for="sort">Sort by:</label>
+      <select name="sort" id="sort" onchange="this.form.submit()">
+        <option value="-created_at" {% if selected_sort == "-created_at" %}selected{% endif %}>Most Recent</option>
+        <option value="title" {% if selected_sort == "title" %}selected{% endif %}>A–Z</option>
+        <option value="-title" {% if selected_sort == "-title" %}selected{% endif %}>Z–A</option>
+        <option value="most_popular" {% if selected_sort == "most_popular" %} selected {% endif %}> Most Popular (Avg Rating)</option>
+        <option value="most_rated" {% if selected_sort == "most_rated" %} selected {% endif %}> Most Rated (# Ratings)</option>
+      </select>
+    </div>
   
-    <label for="tag">Filter by tag:</label>
-    <select name="tag" id="tag" onchange="this.form.submit()">
-      <option value="">All</option>
-      {% for tag in all_tags %}
-        <option value="{{ tag.name }}" {% if tag.name == selected_tag %}selected{% endif %}>
-          {{ tag.name }}
-        </option>
-      {% endfor %}
-    </select>
+    <div class="form-group">
+      <label for="tag">Filter by tag:</label>
+      <select name="tag" id="tag" onchange="this.form.submit()">
+        <option value="">All</option>
+        {% for tag in all_tags %}
+          <option value="{{ tag.name }}" {% if tag.name == selected_tag %}selected{% endif %}>
+            {{ tag.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
 
-    <button class = "btn" type="submit">Search</button>
-    <a href="{% url 'recipe_list' %}{% if target_collection %}?collection_id={{ target_collection.id }}{% endif %}" class="reset btn">Reset</a>
+    <div class="form-group">
+      <button class = "btn" type="submit">Search</button>
+      <a href="{% url 'recipe_list' %}{% if target_collection %}?collection_id={{ target_collection.id }}{% endif %}" class="reset btn">Reset</a>
+    </div>
     
 </form>
 {% endif %}

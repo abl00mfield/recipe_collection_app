@@ -214,6 +214,15 @@ h4 {
   border: 1px solid #ccc;
 }
 
+.form-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.form-group label {
+  white-space: nowrap;
+}
+
 .recipe-card .add-icon {
   /* display: none; */
   opacity: 0;
@@ -291,5 +300,8 @@ h4 {
 
   .recipe-thumb-container {
     height: 300px;
+  }
+  .filter-form {
+    flex-direction: column;
   }
 }
