@@ -1,21 +1,35 @@
 export function initDropdownHandlers() {
-  //hidden menu for collection dropdown
-  document.querySelectorAll(".add-icon").forEach((button) => {
-    button.addEventListener("click", function () {
+  // Get all dropdown toggle buttons
+  const toggleButtons = document.querySelectorAll(".add-icon");
+
+  toggleButtons.forEach((button) => {
+    button.addEventListener("click", function (e) {
+      e.stopPropagation(); // Prevent this click from being caught by the "outside" listener
+
       const recipeId = this.dataset.recipe;
-      const dropdown = document.getElementById(`dropdown-${recipeId}`);
-      dropdown.classList.toggle("hidden");
+      const dropdownToToggle = document.getElementById(`dropdown-${recipeId}`);
+
+      // Close all dropdowns
+      document.querySelectorAll(".collection-dropdown").forEach((dropdown) => {
+        if (dropdown !== dropdownToToggle) {
+          dropdown.classList.add("hidden");
+        }
+      });
+
+      // Toggle the clicked dropdown
+      dropdownToToggle.classList.toggle("hidden");
     });
   });
 
-  //hides the dropdown menu if a user clicks outside of it
+  // Click outside to close all dropdowns
   document.addEventListener("click", function (e) {
-    document.querySelectorAll(".collection-dropdown").forEach((dropdown) => {
-      const isDropdown = dropdown.contains(e.target);
-      const isButton = e.target.closest(".add-icon");
-      if (!isDropdown && !isButton) {
+    const isDropdown = e.target.closest(".collection-dropdown");
+    const isButton = e.target.closest(".add-icon");
+
+    if (!isDropdown && !isButton) {
+      document.querySelectorAll(".collection-dropdown").forEach((dropdown) => {
         dropdown.classList.add("hidden");
-      }
-    });
+      });
+    }
   });
 }

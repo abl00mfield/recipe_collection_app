@@ -93,9 +93,7 @@
                             name="collection_id" 
                             class = "collection-select" 
                             data-recipe-id="{{ recipe.id}}" 
-                            required
-                            {% comment %} onchange="this.form.submit()" {% endcomment %}
-                        >
+                            required>
                             <option value="" disabled selected>Select collection</option>
                             {% for collection in user_collections %}
                                 {% if recipe in collection.recipes.all %}
