@@ -88,6 +88,7 @@ h4 {
   background: transparent;
   padding: 0.5rem;
   border-radius: 6px;
+  color: var(--color-text);
 
   z-index: 20;
   width: max-content;
