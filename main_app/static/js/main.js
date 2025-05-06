@@ -5,6 +5,7 @@ import { initModalHandlers } from "./modalHandlers.js";
 import { initCardNavigation } from "./cardNavigation.js";
 import { initPhotoInputHandlers } from "./photoInputHandlers.js";
 import { initMobileNav } from "./mobileNav.js";
+import { initPageLoadSpinner } from "./pageLoadSpinner.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   initLocalTimestamps();
@@ -14,4 +15,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initCardNavigation();
   initPhotoInputHandlers();
   initMobileNav();
+  initPageLoadSpinner();
 });
