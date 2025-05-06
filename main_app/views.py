@@ -71,6 +71,7 @@ class RecipeList(ListView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         context["page_title"] = "All Recipes"
+        context["search_query"] = self.request.GET.get("q", "")
 
         # Clean the querystring for pagination links (remove page param)
         querydict = self.request.GET.copy()

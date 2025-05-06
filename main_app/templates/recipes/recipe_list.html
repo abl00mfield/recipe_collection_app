@@ -16,6 +16,9 @@
 {% if page_title == "All Recipes" %}
 <form method="get" class="filter-form">
     <input type="text" name="q" id="q" placeholder="Search recipes..." value = "{{ search_query }}">
+    {% if target_collection %}
+    <input type="hidden" name="collection_id" value="{{ target_collection.id }}">
+    {% endif %}
     <label for="sort">Sort by:</label>
     <select name="sort" id="sort" onchange="this.form.submit()">
       <option value="-created_at" {% if selected_sort == "-created_at" %}selected{% endif %}>Most Recent</option>
@@ -36,7 +39,8 @@
     </select>
 
     <button class = "btn" type="submit">Search</button>
-    <a href="{% url 'recipe_list' %}" class="reset btn">Reset</a>
+    <a href="{% url 'recipe_list' %}{% if target_collection %}?collection_id={{ target_collection.id }}{% endif %}" class="reset btn">Reset</a>
+    
 </form>
 {% endif %}
 
