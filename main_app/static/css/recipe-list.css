@@ -94,6 +94,11 @@ h4 {
   width: max-content;
 }
 
+.collection-select {
+  color: black;
+  border-radius: 0;
+}
+
 .hidden {
   display: none;
 }
