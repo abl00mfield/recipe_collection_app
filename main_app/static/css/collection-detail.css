@@ -38,6 +38,10 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+.recipe-card h4 {
+  margin-bottom: 0;
+  font-weight: bold;
+}
 /* .recipe-card img {
   width: 200px;
   height: 200px;
@@ -112,7 +116,7 @@
 
 .set-cover-btn {
   padding: 0.4rem 0.75rem;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   background-color: var(--color-coral-orange);
   color: black;
   border-radius: 4px;
@@ -127,7 +131,7 @@
 
 .selected {
   padding: 0.4rem 0.75rem;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   background-color: var(--color-sand-yellow);
   color: var(--color-text);
   border-radius: 4px;
@@ -156,8 +160,24 @@
   .recipe-card {
     width: 350px;
   }
+  .recipe-card h4 {
+    margin-bottom: 0;
+  }
   .recipe-thumb-container {
     width: 300px;
     height: 300px;
+  }
+
+  .delete-form {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .delete-icon {
+    font-size: 1.5rem;
+  }
+  .set-cover-btn,
+  .selected {
+    font-size: 1.2rem;
   }
 }

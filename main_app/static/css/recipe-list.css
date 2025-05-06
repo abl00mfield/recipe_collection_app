@@ -270,6 +270,18 @@ h4 {
   background-color: #f2c198;
 }
 
+@media (max-width: 768px) {
+  .recipe-card .add-icon {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .add-icon {
+    padding: 0.5rem;
+    font-size: 1.4rem;
+  }
+}
+
 @media (max-width: 600px) {
   .recipe-card {
     width: 350px;
