@@ -97,7 +97,8 @@ h4 {
   display: none;
 }
 
-.add-icon i.fa-solid {
+.add-icon i.fa-solid,
+.add-icon i.fa-regular {
   font-size: 1.2rem;
   color: black;
   transition: color 0.3s ease;
