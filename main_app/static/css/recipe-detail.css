@@ -150,12 +150,12 @@ p {
 /* Hover effects - highlight all stars before the hovered one */
 .star-rating label:hover,
 .star-rating label:hover ~ label {
-  color: #f6ad55;
+  color: var(--color-sand-yellow);
 }
 
 /* Checked effect - highlight all stars up to the selected one */
 .star-rating input[type="radio"]:checked ~ label {
-  color: #f6ad55;
+  color: var(--color-sand-yellow);
 }
 
 .add-to-collection-form {
