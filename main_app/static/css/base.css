@@ -167,6 +167,7 @@ nav a:hover {
   transition: background-color 0.3s ease;
   font-family: "Lato", sans-serif;
   border: none;
+  width: fit-content;
 }
 
 .button-container {
@@ -297,9 +298,9 @@ footer {
   }
 }
 
-@media (max-width: 920px) {
+@media (max-width: 950px) {
   .nav-links {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     text-align: center;
   }
 }
