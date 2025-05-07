@@ -38,7 +38,7 @@
 
   - Organize recipes into custom collections
   - Set cover images for collections
-  - Add and remove recipes from collections via dropdown or modal interface
+  - Add recipes from collections via dropdown or modal interface
   - Create collections on the fly while browsing recipes
 
 - **Recipe Discovery**
