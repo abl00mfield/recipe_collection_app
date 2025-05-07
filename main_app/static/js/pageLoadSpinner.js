@@ -1,5 +1,3 @@
-// static/js/pageLoadSpinner.js
-
 export function initPageLoadSpinner() {
   const overlay = document.getElementById("loading-overlay");
   if (!overlay) return;

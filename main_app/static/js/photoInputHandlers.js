@@ -3,7 +3,7 @@ export function initPhotoInputHandlers() {
   const fileInputs = document.querySelectorAll('input[type="file"]');
 
   fileInputs.forEach((fileInput) => {
-    const fieldName = fileInput.name; // e.g., "photo" or "profile_picture"
+    const fieldName = fileInput.name; //  "photo" or "profile_picture"
     const clearCheckbox = document.querySelector(`#${fieldName}-clear_id`);
 
     if (clearCheckbox) {

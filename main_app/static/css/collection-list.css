@@ -1,6 +1,5 @@
 h2 {
   text-align: center;
-  /* margin-bottom: 1.5rem; */
 }
 
 .collection-list {
@@ -15,7 +14,6 @@ h2 {
 
 .collection-card {
   position: relative;
-
   width: 250px;
   background-color: #f9f9f9;
   border: 1px solid #eee;

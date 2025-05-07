@@ -22,7 +22,7 @@
       </div>
       <ul class="nav-links" id="nav-links">
         <li><a href="{% url 'landing' %}">Home</a></li>
-        <li><a href="{% url 'recipe_list' %}">Recipes</a></li>
+        <li><a href="{% url 'recipe_list' %}">All Recipes</a></li>
         {% if user.is_authenticated %}
         <li><a href="{% url 'user_recipe_list' %}">My Recipes</a></li>
         <li><a href="{% url 'collection_list' %}">My Collections</a></li>
@@ -48,7 +48,7 @@
   </div>
   <main>
     {% block content %}
-    <!-- Page-specific content will be inserted here -->
+    
     {% endblock %}
   </main>
 
