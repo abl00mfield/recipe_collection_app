@@ -7,10 +7,15 @@
 {% endblock%}
 
 {% block content %}
-{% if page_title %}
-  <h2>{{ page_title }}</h2>
+{% if target_collection %}
+<div class="title-container">
+<h2>Adding to {{target_collection.name }} </h2>
+<a href="{% url 'collection_detail' target_collection.id %}" class="btn cancel-btn"> Done adding</a>
+</div>
+{% elif page_title %}
+<h2>{{ page_title }}</h2>  
 {% else %}
-  <h2>All Recipes</h2>
+<h2>All Recipes</h2>
 {% endif %}
 
 {% if page_title == "All Recipes" %}

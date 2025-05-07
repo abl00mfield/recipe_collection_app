@@ -13,6 +13,26 @@ h4 {
   margin: 0 auto;
 }
 
+.title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.title-container h2 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.title-container .btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  line-height: 1;
+  white-space: nowrap;
+}
 .recipe-card {
   display: flex;
   flex-direction: column;
