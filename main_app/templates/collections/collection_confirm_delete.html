@@ -14,7 +14,7 @@
     {% csrf_token %}
     <div class="button-container">
       <button class = "btn" type="submit">Yes, delete</button>
-      <a class = "btn" href="{% url 'collection_detail' collection.id %}">Cancel</a>
+      <a class = "btn cancel-btn" href="{% url 'collection_detail' collection.id %}">Cancel</a>
     </div>
   </form>
 {% endblock %}

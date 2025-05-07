@@ -4,7 +4,7 @@
   --color-dark-teal: #264653;
   --color-teal-green: #2a9d8f;
   --color-sand-yellow: #e9c46a;
-  --color-coral-orange: #f9b781;
+  --color-coral-orange: #f4a261;
   --color-rust-red: #e76f51;
   --color-teal-green-hover: #45b6a4;
 
@@ -188,8 +188,16 @@ nav a:hover {
   background-color: var(--color-rust-red);
 }
 
+.btn.cancel-btn {
+  background-color: var(--color-sand-yellow);
+}
+
+.btn.cancel-btn:hover {
+  background-color: #f5da95;
+}
+
 .btn.danger-btn:hover {
-  background-color: var(--color-danger-hover);
+  background-color: #e7866d;
 }
 
 #loading-overlay {

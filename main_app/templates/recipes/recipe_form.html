@@ -49,7 +49,7 @@
     <div class="button-container">
       {% if object %}
       <button type="submit">Edit Recipe</button>
-      <a href="{% url 'recipe_detail' object.id %}" class="btn danger-btn">Cancel</a>
+      <a href="{% url 'recipe_detail' object.id %}" class="btn cancel-btn">Cancel</a>
       {% else %}
       <button type="submit">Save Recipe</button>
       {% endif %}
