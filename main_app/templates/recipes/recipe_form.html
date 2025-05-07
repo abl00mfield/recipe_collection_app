@@ -46,7 +46,14 @@
     {% if form.custom_tags.help_text %}
     <small class="form-help">{{ form.custom_tags.help_text }}</small>
     {% endif %}
-    <button type="submit">Save Recipe</button>
+    <div class="button-container">
+      {% if object %}
+      <button type="submit">Edit Recipe</button>
+      <a href="{% url 'recipe_detail' object.id %}" class="btn danger-btn">Cancel</a>
+      {% else %}
+      <button type="submit">Save Recipe</button>
+      {% endif %}
+    </div>  
   </form>
 
 {% endblock %}

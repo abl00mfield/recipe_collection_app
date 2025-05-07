@@ -19,9 +19,13 @@
     {% csrf_token %}
     {{ form.as_p }}
     {% if object %}
+    <div class="button-container">
         <button type="submit">Update Collection</button>
+        <a href="{% url 'collection_detail' object.id %}" class ="btn danger-btn">Cancel</a>
+    </div>
     {% else %}
         <button type="submit">Save Collection</button>
+      
     {% endif %}
     
   </form>
