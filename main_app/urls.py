@@ -12,6 +12,7 @@ urlpatterns = [
     # Recipe URLs
     path("recipes/", views.RecipeList.as_view(), name="recipe_list"),
     path("recipes/create/", views.RecipeCreate.as_view(), name="recipe_create"),
+    # path("recipes")
     path(
         "recipes/<int:recipe_id>/", views.RecipeDetail.as_view(), name="recipe_detail"
     ),

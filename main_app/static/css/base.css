@@ -140,7 +140,10 @@ nav a:hover {
 
 .landing-buttons {
   display: flex;
+  justify-content: center;
   gap: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
 .landing-container img {
   width: 400px;
@@ -355,7 +358,6 @@ footer {
     width: 350px;
   }
   .landing-buttons {
-    flex-direction: column;
     gap: 1rem;
   }
 }
