@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Add or Import</title>
+{% endblock%}
+
+{% block content %}
+  <h2>Add a New Recipe</h2>
+  <div class="button-container">
+    <a href="{% url 'recipe_create' %}" class="btn">Start from Scratch</a>
+    <a href="{% url 'recipe_import' %}" class="btn">Import from a Website</a>
+  </div>
+{% endblock %}

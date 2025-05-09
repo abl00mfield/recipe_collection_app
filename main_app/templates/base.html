@@ -26,7 +26,7 @@
         {% if user.is_authenticated %}
         <li><a href="{% url 'user_recipe_list' %}">My Recipes</a></li>
         <li><a href="{% url 'collection_list' %}">My Collections</a></li>
-        <li><a href="{% url 'recipe_create' %}">Add a New Recipe</a></li>
+        <li><a href="{% url 'recipe_create_choice' %}">Add a New Recipe</a></li>
         <li><a href="{% url 'collection_create' %}">Add a New Collection</a></li>
         <li><a href="{% url 'profile' %}">Profile</a></li>
         <li><a href="{% url 'signout' %}">Sign Out</a></li>

@@ -36,7 +36,13 @@
 
     
     <div class="form-group">
-      <label for="{{ form.photo.id_for_label }}">Photo:</label>     
+      <label for="{{ form.photo.id_for_label }}">Photo:</label>  
+      {% if scraped_image_url %}
+      <div class="photo-preview">
+        <p>Imported image</p>
+        <img src=" {{ scraped_image_url }}" alt="uploaded photo" class="thumbnail" />
+      </div>   
+      {% endif %}
       {{ form.photo }}        
     </div>
 

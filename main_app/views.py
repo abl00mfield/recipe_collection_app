@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import login, logout
@@ -7,6 +8,10 @@ from django.contrib import messages
 from django.db import models, IntegrityError
 from django.db.models import Q, Avg, Count
 from django.db.models.functions import Coalesce
+from recipe_scrapers import scrape_me, scrape_html
+from recipe_scrapers._exceptions import WebsiteNotImplementedError
+import requests
+from cloudinary.uploader import upload as cloudinary_upload
 
 
 from django.views.generic import (
@@ -23,6 +28,7 @@ from .forms import (
     SignUpForm,
     FeedbackForm,
     UserProfileForm,
+    ImportRecipeForm,
 )
 
 
@@ -243,23 +249,112 @@ class RecipeDetail(DetailView):
         return redirect("recipe_detail", recipe_id=self.object.pk)
 
 
+@login_required
+def recipe_create_choice(request):
+    return render(request, "recipes/recipe_create_choice.html")
+
+
+@login_required
+def recipe_import(request):
+    if request.method == "POST":
+        form = ImportRecipeForm(request.POST)
+        if form.is_valid():
+            url = form.cleaned_data["url"]
+            try:
+                scraper = scrape_me(url)
+                scraped_photo_credit = scraper.author() + " via " + scraper.host()
+
+                scraped_description = (
+                    scraper.description() or f"Imported from {scraper.host()}"
+                )
+                request.session["scraped_recipe"] = {
+                    "title": scraper.title(),
+                    "description": scraped_description,
+                    "ingredients": "\n".join(scraper.ingredients()),
+                    "instructions": scraper.instructions(),
+                    "source": form.cleaned_data["url"],
+                    "photo_credit": scraped_photo_credit,
+                }
+
+                image_url = scraper.image()
+
+                if image_url:
+                    request.session["scraped_image_url"] = image_url
+                return redirect("recipe_create")
+            except WebsiteNotImplementedError:
+                # Site not supported — send to manual form with message
+                messages.error(
+                    request,
+                    "That site isn't supported for import, but you can enter the recipe manually.",
+                )
+                request.session["scraped_recipe"] = {
+                    "source": url,
+                }
+                return redirect("recipe_create")
+            except Exception as e:
+                form.add_error(None, f"Failed to import: {e}")
+    else:
+        form = ImportRecipeForm()
+    return render(request, "recipes/import_recipe.html", {"form": form})
+
+
 class RecipeCreate(LoginRequiredMixin, CreateView):
     model = Recipe
     form_class = RecipeForm
     template_name = "recipes/recipe_form.html"
-    success_url = "/recipes/"
+    # success_url = "/recipes/"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        image_url = self.request.session.get("scraped_image_url")
+        if image_url:
+            context["scraped_image_url"] = image_url
+        return context
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect("signin")
+        return super().get(request, *args, **kwargs)
+
+    def get_initial(self):
+        # prefill form if scraped data is in session
+        initial = super().get_initial()
+        scraped_data = self.request.session.pop("scraped_recipe", None)
+        if scraped_data:
+            initial.update(scraped_data)
+        return initial
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        response = super().form_valid(form)
-        tag_names = form.cleaned_data.get("custom_tags", [])
 
+        # check for scraped img URL in session
+        image_url = self.request.session.pop("scraped_image_url", None)
+
+        if image_url:
+            headers = {"User-Agent": "Mozilla/5.0", "Referer": image_url}
+            try:
+                response = requests.get(image_url, headers=headers)
+
+                if response.status_code == 200:
+                    upload_result = cloudinary_upload(
+                        response.content, resource_type="image", folder="recipe-box"
+                    )
+                    form.instance.photo = upload_result["public_id"]
+            except Exception as e:
+                messages.warning(self.request, f"Could not fetch image: {e}")
+
+        response = super().form_valid(form)
+
+        tag_names = form.cleaned_data.get("custom_tags", [])
         for name in tag_names:
             tag, created = Tag.objects.get_or_create(name=name)
             self.object.tags.add(tag)
 
         messages.success(self.request, "Recipe created successfully!")
         return response
+
+    def get_success_url(self):
+        return reverse("recipe_detail", kwargs={"recipe_id": self.object.pk})
 
 
 class RecipeUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
