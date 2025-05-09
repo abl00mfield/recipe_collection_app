@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
+<title>Import Recipe</title>
+{% endblock %}
+
+{% block content %}
+  <h2>Import Recipe from Website</h2>
+  <form method="POST" data-loading-message="Importing...">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Fetch Recipe</button>
+  </form>
+{% endblock %}

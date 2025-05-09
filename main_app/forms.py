@@ -16,6 +16,12 @@ class SignUpForm(UserCreationForm):
         fields = ("username", "email", "password1", "password2")
 
 
+class ImportRecipeForm(forms.Form):
+    url = forms.URLField(
+        label="Recipe URL", widget=forms.URLInput(attrs={"placeholder": "https://..."})
+    )
+
+
 class RecipeForm(forms.ModelForm):
     custom_tags = forms.CharField(
         max_length=255,
