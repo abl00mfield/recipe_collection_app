@@ -341,7 +341,7 @@ class RecipeCreate(LoginRequiredMixin, CreateView):
                     )
                     form.instance.photo = upload_result["public_id"]
             except Exception as e:
-                messages.warning(self.request, f"Could not fetch image: {e}")
+                messages.error(self.request, f"Could not fetch image: {e}")
 
         response = super().form_valid(form)
 

@@ -16,4 +16,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initPhotoInputHandlers();
   initMobileNav();
   initPageLoadSpinner();
+  window.addEventListener("pageshow", () => {
+    const overlay = document.getElementById("loading-overlay");
+    if (overlay) {
+      overlay.classList.add("hidden");
+    }
+  });
 });
