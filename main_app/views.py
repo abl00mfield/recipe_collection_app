@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.db import models, IntegrityError
 from django.db.models import Q, Avg, Count
 from django.db.models.functions import Coalesce
-from recipe_scrapers import scrape_me, scrape_html
+from recipe_scrapers import scrape_me
 from recipe_scrapers._exceptions import WebsiteNotImplementedError
 import requests
 from cloudinary.uploader import upload as cloudinary_upload
@@ -290,15 +290,25 @@ def recipe_import(request):
 
             try:
                 scraper = scrape_me(url)
-                category = getattr(scraper, "category", lambda: "")()
-                cuisine = getattr(scraper, "cuisine", lambda: "")()
+
+                if hasattr(scraper, "category"):
+                    category = scraper.category()
+                else:
+                    category = ""
+
+                if hasattr(scraper, "cuisine"):
+                    cuisine = scraper.cuisine()
+                else:
+                    cuisine = ""
                 generated_tags = clean_scraper_tags(category, cuisine)
 
-                scraped_photo_credit = scraper.author() + " via " + scraper.host()
+                author = getattr(scraper, "author", lambda: None)()
+                host = scraper.host()
+                scraped_photo_credit = f"{author} via {host}" if author else host
 
-                scraped_description = (
-                    scraper.description() or f"Imported from {scraper.host()}"
-                )
+                description = getattr(scraper, "description", lambda: "")()
+                scraped_description = description or f"Imported from {scraper.host()}"
+
                 request.session["scraped_recipe"] = {
                     "title": scraper.title(),
                     "description": scraped_description,
