@@ -254,14 +254,46 @@ def recipe_create_choice(request):
     return render(request, "recipes/recipe_create_choice.html")
 
 
+def clean_scraper_tags(*args):
+    """
+    Takes any number of tag strings (comma-separated or single)
+    and returns a clean space-separated string of quoted tags.
+    """
+    tag_list = []
+    for raw in args:
+        if not raw:
+            continue
+        for tag in raw.split(","):
+            cleaned = tag.strip().replace('"', "")
+            if not cleaned:
+                continue
+            if " " in cleaned:
+                tag_list.append(f'"{cleaned}"')
+            else:
+                tag_list.append(cleaned)
+    return " ".join(tag_list)
+
+
 @login_required
 def recipe_import(request):
     if request.method == "POST":
         form = ImportRecipeForm(request.POST)
         if form.is_valid():
             url = form.cleaned_data["url"]
+
+            existing = Recipe.objects.filter(source=url).first()
+            if existing:
+                messages.error(
+                    request, "This recipe already exists - redirecting you to it!"
+                )
+                return redirect("recipe_detail", recipe_id=existing.id)
+
             try:
                 scraper = scrape_me(url)
+                category = getattr(scraper, "category", lambda: "")()
+                cuisine = getattr(scraper, "cuisine", lambda: "")()
+                generated_tags = clean_scraper_tags(category, cuisine)
+
                 scraped_photo_credit = scraper.author() + " via " + scraper.host()
 
                 scraped_description = (
@@ -274,6 +306,7 @@ def recipe_import(request):
                     "instructions": scraper.instructions(),
                     "source": form.cleaned_data["url"],
                     "photo_credit": scraped_photo_credit,
+                    "custom_tags": generated_tags,
                 }
 
                 image_url = scraper.image()
@@ -325,6 +358,15 @@ class RecipeCreate(LoginRequiredMixin, CreateView):
         return initial
 
     def form_valid(self, form):
+        source = form.cleaned_data.get("source")
+        if source:
+            existing = Recipe.objects.filter(source=source).first()
+            if existing:
+                messages.error(
+                    self.request, "This recipe already exists - here's the original"
+                )
+                return redirect("recipe_detail", recipe_id=existing.id)
+
         form.instance.author = self.request.user
 
         # check for scraped img URL in session
