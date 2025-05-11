@@ -58,6 +58,32 @@
 </form>
 {% endif %}
 
+{% if page_title == "My Recipes" %}
+  <form method="get" class="filter-form">
+    <div class="form-group">
+    <label for="sort">Sort by:</label>
+    <select name="sort" id="sort" onchange="this.form.submit()">      
+      <option value="title" {% if selected_sort == "title" %}selected{% endif %}>Title A–Z</option>
+      <option value="-title" {% if selected_sort == "-title" %}selected{% endif %}>Title Z–A</option>
+      <option value="-created_at" {% if selected_sort == "-created_at" %}selected{% endif %}>Most Recent</option>
+      <option value="created_at" {% if selected_sort == "created_at" %}selected{% endif %}>Oldest</option>
+    </select>
+  </div>
+  {% comment %} <div class="form-group">
+    <label for="tag">Filter by tag:</label>
+    <select name="tag" id="tag" onchange="this.form.submit()">
+      <option value="">All</option>
+      {% for tag in user_tags %}
+        <option value="{{ tag.name }}" {% if tag.name == selected_tag %}selected{% endif %}>
+          {{ tag.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div> {% endcomment %}
+
+  </form>
+{% endif %}
+
 
 {% if recipes %}
     <div class="recipe-list">

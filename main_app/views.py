@@ -164,9 +164,17 @@ class UserRecipeList(LoginRequiredMixin, ListView):
     template_name = "recipes/recipe_list.html"
     context_object_name = "recipes"
     ordering = ["title"]
+    paginate_by = 15
 
     def get_queryset(self):
-        return Recipe.objects.filter(author=self.request.user)
+        sort = self.request.GET.get("sort", "title")  # default sort
+        queryset = Recipe.objects.filter(author=self.request.user).order_by(sort)
+
+        tag_name = self.request.GET.get("tag")
+        if tag_name:
+            queryset = queryset.filter(tags__name__iexact=tag_name)
+
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -184,6 +192,13 @@ class UserRecipeList(LoginRequiredMixin, ListView):
 
         context["user_collections"] = user_collections
         context["saved_recipe_ids"] = saved_recipe_ids
+        context["selected_sort"] = self.request.GET.get("sort", "title")
+        context["user_tags"] = (
+            Tag.objects.filter(recipes__author=self.request.user)
+            .distinct()
+            .order_by("name")
+        )
+        context["selected_tag"] = self.request.GET.get("tag", "All")
 
         return context
 
