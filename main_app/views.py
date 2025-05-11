@@ -263,15 +263,30 @@ def clean_scraper_tags(*args):
     for raw in args:
         if not raw:
             continue
+        # if isinstance(raw, (list, tuple)):
+        #     raw = ", ".join(raw)
+
         for tag in raw.split(","):
             cleaned = tag.strip().replace('"', "")
             if not cleaned:
                 continue
             if " " in cleaned:
                 tag_list.append(f'"{cleaned}"')
+            elif tag.lower() == "american":
+                continue
             else:
                 tag_list.append(cleaned)
     return " ".join(tag_list)
+
+
+def safe_scrape(method_name, scraper):
+    try:
+        method = getattr(scraper, method_name, None)
+        if callable(method):
+            return method()
+    except Exception:
+        pass
+    return ""
 
 
 @login_required
@@ -290,29 +305,35 @@ def recipe_import(request):
 
             try:
                 scraper = scrape_me(url)
+                category = safe_scrape("category", scraper)
+                cuisine = safe_scrape("cuisine", scraper)
 
-                if hasattr(scraper, "category"):
-                    category = scraper.category()
-                else:
-                    category = ""
-
-                if hasattr(scraper, "cuisine"):
-                    cuisine = scraper.cuisine()
-                else:
-                    cuisine = ""
                 generated_tags = clean_scraper_tags(category, cuisine)
 
-                author = getattr(scraper, "author", lambda: None)()
+                author = safe_scrape("author", scraper)
                 host = scraper.host()
                 scraped_photo_credit = f"{author} via {host}" if author else host
 
-                description = getattr(scraper, "description", lambda: "")()
+                description = safe_scrape("description", scraper)
+
                 scraped_description = description or f"Imported from {scraper.host()}"
+
+                # ingredient groups
+                try:
+                    ingredient_groups = scraper.ingredient_groups()
+                    grouped_lines = []
+                    for group in ingredient_groups:
+                        if group.purpose:
+                            grouped_lines.append(f"[{group.purpose}]")
+                        grouped_lines.extend(group.ingredients)
+                    ingredients_text = "\n".join(grouped_lines)
+                except Exception:
+                    ingredients_text = "\n".join(scraper.ingredients())
 
                 request.session["scraped_recipe"] = {
                     "title": scraper.title(),
                     "description": scraped_description,
-                    "ingredients": "\n".join(scraper.ingredients()),
+                    "ingredients": ingredients_text,
                     "instructions": scraper.instructions(),
                     "source": form.cleaned_data["url"],
                     "photo_credit": scraped_photo_credit,

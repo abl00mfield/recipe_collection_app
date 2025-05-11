@@ -96,6 +96,12 @@
   justify-content: flex-start;
 }
 
+.ingredient-group {
+  margin-top: 1rem;
+  font-weight: bold;
+  text-align: left;
+}
+
 .instruction-list,
 .ingredient-list,
 .button-container,

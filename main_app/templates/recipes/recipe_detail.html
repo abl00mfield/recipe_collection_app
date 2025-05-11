@@ -81,13 +81,27 @@
     <p>{{ recipe.description }}</p>
 
     <h3>Ingredients</h3>
-    <ul class="ingredient-list">
+    {% comment %} <ul class="ingredient-list">
         {% for line in recipe.ingredients.splitlines %}
           {% if line %}
             <li>{{ line }}</li>
           {% endif %}
         {% endfor %}
-      </ul>
+    </ul> {% endcomment %}
+    <ul class="ingredient-list">
+      {% for line in recipe.ingredients.splitlines %}
+        {% if line|slice:"0:1" == "[" %}
+          {% if not forloop.first %}
+            </ul>
+          {% endif %}
+          <h4 class="ingredient-group">{{ line|slice:"1:-1" }}</h4>
+          <ul class="ingredient-list">
+        {% else %}
+          <li>{{ line }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+
 
       <h3>Instructions</h3>
       <ol class="instruction-list">
