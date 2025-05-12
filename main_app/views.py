@@ -425,7 +425,11 @@ class RecipeCreate(LoginRequiredMixin, CreateView):
 
                 if response.status_code == 200:
                     upload_result = cloudinary_upload(
-                        response.content, resource_type="image", folder="recipe-box"
+                        response.content,
+                        resource_type="image",
+                        folder="recipe-box",
+                        format="jpg",
+                        secure=True,
                     )
                     form.instance.photo = upload_result["public_id"]
             except Exception as e:

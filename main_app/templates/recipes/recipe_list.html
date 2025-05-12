@@ -146,7 +146,11 @@
             
             <div class="recipe-thumb-container">       
                 {% if recipe.photo %}
-                <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class ="recipe-thumb">
+                <img 
+                  src="{{ recipe.get_jpg_url }}" 
+                  alt="{{ recipe.title }}"                  
+                  class ="recipe-thumb"
+                  onerror="this.onerror=null; this.src='{% static 'img/default_recipe.jpg' %}';">
                 {% else %}
                 <img src="{% static 'img/default_recipe.jpg' %}" alt="{{ recipe.title }}" class ="recipe-thumb">
                 {% endif %}  

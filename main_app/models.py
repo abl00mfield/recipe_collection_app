@@ -29,6 +29,13 @@ class Recipe(models.Model):
     tags = models.ManyToManyField(Tag, blank=True, related_name="recipes")
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def get_jpg_url(self):
+        if self.photo:
+            return self.photo.url.replace("http://", "https://").replace(
+                "/upload/", "/upload/f_jpg/"
+            )
+        return ""
+
     def get_absolute_url(self):
         return reverse("recipe_detail", kwargs={"recipe_id": self.pk})
 

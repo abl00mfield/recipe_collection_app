@@ -22,7 +22,11 @@
     <div class="photo-collection-container">
         <figure class="recipe-photo-wrapper">
             {% if recipe.photo %}      
-            <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="recipe-photo">
+            <img 
+              src="{{ recipe.get_jpg_url }}" 
+              alt="{{ recipe.title }}"                  
+              class ="recipe-photo"
+              onerror="this.onerror=null; this.src='{% static 'img/default_recipe.jpg' %}';">
             {% if recipe.photo_credit %}
             <figcaption class="photo-credit">{{ recipe.photo_credit }}</figcaption>
             {% endif %}
