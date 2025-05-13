@@ -377,6 +377,13 @@ def recipe_import(request):
     return render(request, "recipes/import_recipe.html", {"form": form})
 
 
+@login_required
+def cancel_recipe_creation(request):
+    request.session.pop("scraped_recipe", None)
+    request.session.pop("scraped_image_url", None)
+    return redirect("recipe_create_choice")
+
+
 class RecipeCreate(LoginRequiredMixin, CreateView):
     model = Recipe
     form_class = RecipeForm
@@ -393,6 +400,10 @@ class RecipeCreate(LoginRequiredMixin, CreateView):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect("signin")
+        if not request.session.get("scraped_recipe") and not request.session.get(
+            "scraped_image_url"
+        ):
+            request.session.pop("scraped_image_url", None)
         return super().get(request, *args, **kwargs)
 
     def get_initial(self):
@@ -430,6 +441,7 @@ class RecipeCreate(LoginRequiredMixin, CreateView):
                         folder="recipe-box",
                         format="jpg",
                         secure=True,
+                        upload_preset="ml_default",
                     )
                     form.instance.photo = upload_result["public_id"]
             except Exception as e:

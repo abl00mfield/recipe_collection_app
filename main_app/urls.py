@@ -15,6 +15,11 @@ urlpatterns = [
     path("recipes/create/manual/", views.RecipeCreate.as_view(), name="recipe_create"),
     path("recipes/create/import/", views.recipe_import, name="recipe_import"),
     path(
+        "recipes/cancel-create/",
+        views.cancel_recipe_creation,
+        name="cancel_recipe_creation",
+    ),
+    path(
         "recipes/<int:recipe_id>/", views.RecipeDetail.as_view(), name="recipe_detail"
     ),
     path(
