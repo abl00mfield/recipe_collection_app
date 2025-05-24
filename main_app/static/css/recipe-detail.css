@@ -68,6 +68,31 @@
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.9rem;
+  position: relative;
+}
+
+.delete-form {
+  position: absolute;
+  top: -0.5rem;
+  right: 0rem;
+  pointer-events: none;
+  transition: opacity 0.2s ease 0.1s;
+  /* opacity: 0; */
+}
+
+.delete-icon {
+  background: transparent;
+  color: black;
+  cursor: pointer;
+  border: none;
+  padding: 0.3rem;
+  font-size: 0.6rem;
+  transition: color 0.2s ease;
+}
+
+.collection-list li:hover .delete-form {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .collection-form-container {
@@ -109,6 +134,25 @@ h2,
 h3,
 p {
   margin-bottom: 1rem;
+}
+
+.yield_time {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.group {
+  display: flex;
+  gap: 1rem;
+}
+.yield_time h4 {
+  margin: 0;
+  font-weight: bold;
 }
 
 .tag {

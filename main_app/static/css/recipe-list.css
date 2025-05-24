@@ -99,8 +99,8 @@ h4 {
 
 .collection-dropdown {
   position: absolute;
-  top: 1rem;
-  right: 0;
+  top: -0.25rem;
+  right: 1rem;
   background: transparent;
   padding: 0.5rem;
   border-radius: 6px;

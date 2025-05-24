@@ -326,6 +326,11 @@ def recipe_import(request):
                 generated_tags = clean_scraper_tags(category, cuisine)
 
                 author = safe_scrape("author", scraper)
+                yield_amount = safe_scrape("yields", scraper)
+                time = safe_scrape("total_time", scraper)
+                notes = safe_scrape("notes", scraper)
+                total_time = f"{time} minutes" if time else ""
+
                 host = scraper.host()
                 scraped_photo_credit = f"{author} via {host}" if author else host
 
@@ -353,6 +358,9 @@ def recipe_import(request):
                     "source": form.cleaned_data["url"],
                     "photo_credit": scraped_photo_credit,
                     "custom_tags": generated_tags,
+                    "yield_amount": yield_amount,
+                    "total_time": total_time,
+                    "notes": notes,
                 }
 
                 image_url = scraper.image()
@@ -585,14 +593,20 @@ def collection_add_recipe(request, recipe_id):
 
         if recipe not in collection.recipes.all():
             collection.recipes.add(recipe)
-            messages.success(request, f'"{recipe.title}" was added to your collection.')
+            messages.success(
+                request,
+                f'"{recipe.title}" was added to the "{collection.name}" collection',
+            )
         else:
-            messages.info(request, f'"{recipe.title}" is already in this collection.')
+            messages.info(
+                request,
+                f'"{recipe.title}" is already in the "{collection.name}" collection.',
+            )
 
         if next_url:
             return redirect(next_url)
 
-    return redirect("collection_detail", collection_id=collection.id)
+    return redirect("recipe_list")
 
 
 @login_required
@@ -601,6 +615,7 @@ def create_collection_inline(request):
         name = request.POST.get("name")
         recipe_id = request.POST.get("recipe_id")
         collection = None
+        next_url = request.POST.get("next")
 
         if name:
             try:
@@ -625,8 +640,10 @@ def create_collection_inline(request):
         else:
             messages.error(request, "Collection name is required")
 
-        if collection:
-            return redirect("collection_detail", collection_id=collection.id)
+        if next_url:
+            return redirect(next_url)
+        # if collection:
+        #     return redirect("collection_detail", collection_id=collection.id)
 
     return redirect("recipe_list")
 
@@ -635,10 +652,13 @@ def create_collection_inline(request):
 def collection_remove_recipe(request, collection_id, recipe_id):
     collection = get_object_or_404(Collection, id=collection_id, user=request.user)
     recipe = get_object_or_404(Recipe, id=recipe_id)
-
+    next_url = request.POST.get("next")
     if request.method == "POST":
         collection.recipes.remove(recipe)
         messages.success(request, f'"{recipe.title}" removed from "{collection.name}".')
+
+    if next_url:
+        return redirect(next_url)
 
     return redirect("collection_detail", collection_id=collection.id)
 

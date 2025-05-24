@@ -17,8 +17,15 @@ class Recipe(models.Model):
     title = models.CharField(max_length=255)
     source = models.URLField(blank=True, null=True, help_text="Must be a valid URL")
     description = models.TextField()
+    yield_amount = models.CharField(
+        max_length=100, blank=True, help_text="num of servings..."
+    )
     ingredients = models.TextField()
     instructions = models.TextField()
+    notes = models.TextField(blank=True)
+    total_time = models.CharField(
+        max_length=100, blank=True, help_text="time to prepare..."
+    )
     photo = CloudinaryField("image", blank=True, null=True)
     photo_credit = models.CharField(
         max_length=255,

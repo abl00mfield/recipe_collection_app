@@ -22,16 +22,20 @@
             onsubmit="return confirm('Delete this recipe from the collection?');"
         >
         {% csrf_token %}
-            <button type="submit" class="delete-icon" title="Delete Collection" aria-label="Delete Collection">
+            <button type="submit" class="delete-icon" title="Delete from Collection" aria-label="Delete from collection">
                 <i class="fa-solid fa-trash"></i>
             </button>
         </form>
         <div class="recipe-thumb-container">
             {% if recipe.photo %}
-            <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="recipe-thumb">
-            {% else %}
-            <img src="{% static 'img/default-recipe-thumb.png' %}" alt="Default image" class="recipe-thumb">
-            {% endif %}           
+                <img 
+                  src="{{ recipe.get_jpg_url }}" 
+                  alt="{{ recipe.title }}"                  
+                  class ="recipe-thumb"
+                  onerror="this.onerror=null; this.src='{% static 'img/default_recipe.jpg' %}';">
+                {% else %}
+                <img src="{% static 'img/default_recipe.jpg' %}" alt="{{ recipe.title }}" class ="recipe-thumb">
+                {% endif %}         
         </div>                     
                   
         <h4>{{ recipe.title }}</h4>  

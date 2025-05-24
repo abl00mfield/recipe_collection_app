@@ -35,8 +35,11 @@ class RecipeForm(forms.ModelForm):
             "title",
             "source",
             "description",
+            "yield_amount",
+            "total_time",
             "ingredients",
             "instructions",
+            "notes",
             "photo",
             "photo_credit",
         ]

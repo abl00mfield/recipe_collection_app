@@ -41,9 +41,23 @@
             <div class="recipe-collections">              
                 <h3>In Collections</h3>
                 <ul class="collection-list">
-                    {% for collection in collections %}
-                    <li>{{ collection.name }}</li>                  
-                {% empty %}
+                  {% for collection in collections %}
+                    
+                        <li>{{ collection.name }}
+                          <form 
+                            method="POST"
+                            action="{% url 'collection_remove_recipe' collection.id recipe.id%}"
+                            class="delete-form"
+                          >
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                            <button type="submit" class= "delete-icon">
+                              <i class="fa-solid fa-x"></i>
+                            </button>
+                          </form>
+                        </li>                  
+                    
+                  {% empty %}
                 </ul>
                 <p>Not added to any collections yet!</p>
                 {% endfor %}          
@@ -52,6 +66,7 @@
             <div class="collection-form-container">
                 <form method="POST" action="{% url 'collection_add_recipe' recipe.id %}" class="add-to-collection-form">
                 {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
                     <label for="collection_id">Add to Collection:</label>
                     <select 
                         name="collection_id" 
@@ -79,19 +94,31 @@
             {% endif %}
         </div>
     </div>
-    
+
+    {% if recipe.yield_amount or recipe.total_time %}
+
+    <div class="yield_time">
+      {% if recipe.yield_amount %}
+      <div class="group">
+        <h4>Yield: </h4>
+        <span>{{recipe.yield_amount}}</span>
+      </div>
+      {% endif %}
+      {% if recipe.total_time %}
+      <div class="group">
+        <h4>Total time: </h4>
+        <span>{{recipe.total_time}}</span>
+      </div>
+      {% endif %}
+    </div>
+
+    {% endif %}
 
     <h3>Description</h3>
     <p>{{ recipe.description }}</p>
 
     <h3>Ingredients</h3>
-    {% comment %} <ul class="ingredient-list">
-        {% for line in recipe.ingredients.splitlines %}
-          {% if line %}
-            <li>{{ line }}</li>
-          {% endif %}
-        {% endfor %}
-    </ul> {% endcomment %}
+   
     <ul class="ingredient-list">
       {% for line in recipe.ingredients.splitlines %}
         {% if line|slice:"0:1" == "[" %}
@@ -115,6 +142,10 @@
           {% endif %}
         {% endfor %}
       </ol>
+      {% if recipe.notes %}
+      <h3>Notes</h3>
+      <p>{{recipe.notes}}</p>
+      {% endif %}
 
     {% if recipe.tags.all %}
       <h3>Tags</h3>
@@ -186,6 +217,7 @@
     <div class="modal-content">
       <form method="POST" action="{% url 'collection_create_inline' %}">
         {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
         <label for="new-collection-name">New collection name:</label>
         <input type="text" id="new-collection-name" name="name" required>
         <input type="hidden" id="new-collection-recipe-id" name="recipe_id">
