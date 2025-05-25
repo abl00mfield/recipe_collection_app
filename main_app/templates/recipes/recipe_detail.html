@@ -14,7 +14,7 @@
     {% if recipe.source %}
         <p><strong>Original Source:</strong>
             <a href="{{ recipe.source }}" target="_blank" rel="noopener noreferrer">
-                {{ recipe.source|cut:"https://"|cut:"http://" }}
+                {{ recipe.source|cut:"https://"|cut:"http://"|truncatechars:35 }}
             </a>
         </p>
     {% endif %}

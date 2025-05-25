@@ -12,6 +12,7 @@ from recipe_scrapers import scrape_me
 from recipe_scrapers._exceptions import WebsiteNotImplementedError
 import requests
 from cloudinary.uploader import upload as cloudinary_upload
+from .models import normalize_url
 
 
 from django.views.generic import (
@@ -304,6 +305,18 @@ def safe_scrape(method_name, scraper):
     return ""
 
 
+def format_minutes(minutes):
+    if not minutes:
+        return ""
+    hours, mins = divmod(minutes, 60)
+    if hours and mins:
+        return f"{hours} hour{'s' if hours > 1 else ''} {mins} minute{'s' if mins > 1 else ''}"
+    elif hours:
+        return f"{hours} hour{'s' if hours > 1 else ''}"
+    else:
+        return f"{mins} minute{'s' if mins > 1 else ''}"
+
+
 @login_required
 def recipe_import(request):
     if request.method == "POST":
@@ -329,7 +342,8 @@ def recipe_import(request):
                 yield_amount = safe_scrape("yields", scraper)
                 time = safe_scrape("total_time", scraper)
                 notes = safe_scrape("notes", scraper)
-                total_time = f"{time} minutes" if time else ""
+
+                total_time = format_minutes(time)
 
                 host = scraper.host()
                 scraped_photo_credit = f"{author} via {host}" if author else host
@@ -423,7 +437,7 @@ class RecipeCreate(LoginRequiredMixin, CreateView):
         return initial
 
     def form_valid(self, form):
-        source = form.cleaned_data.get("source")
+        source = normalize_url(form.cleaned_data.get("source"))
         if source:
             existing = Recipe.objects.filter(source=source).first()
             if existing:

@@ -4,6 +4,13 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from cloudinary.models import CloudinaryField
 from cloudinary.uploader import destroy
 from django.urls import reverse
+from urllib.parse import urlparse, urlunparse
+
+
+def normalize_url(url):
+    parsed = urlparse(url)
+    normalized = parsed._replace(fragment="", query="")
+    return urlunparse(normalized)
 
 
 class Tag(models.Model):
@@ -55,6 +62,11 @@ class Recipe(models.Model):
                 print(f"Error deleting Cloudinary image: {e}")
 
         super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        if self.source:
+            self.source = normalize_url(self.source)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
