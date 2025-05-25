@@ -11,6 +11,8 @@ h4 {
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .title-container {
@@ -51,15 +53,16 @@ h4 {
   color: inherit;
   text-decoration: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  overflow: visible;
+  position: relative;
+  z-index: 0;
 }
 
 .recipe-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-5px) scale(1.05);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.recipe-card:hover {
-  transform: scale(1.05);
+  z-index: 1;
 }
 
 .recipe-thumb {
@@ -95,23 +98,19 @@ h4 {
   position: absolute;
   top: 0;
   right: 0;
+  z-index: 100000;
 }
 
 .collection-dropdown {
   position: absolute;
-  top: -0.25rem;
-  right: 1rem;
+  top: -0.35rem;
+  right: 0.8rem;
   background: transparent;
   padding: 0.5rem;
   border-radius: 6px;
   color: var(--color-text);
-  z-index: 20;
+  z-index: 9999;
   width: max-content;
-}
-
-.collection-select {
-  color: black;
-  border-radius: 0;
 }
 
 .hidden {
@@ -127,6 +126,48 @@ h4 {
 
 .add-icon:hover i {
   color: var(--color-sand-yellow);
+}
+.collection-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  background-color: white;
+  opacity: 0.95;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  right: 0.75em;
+  top: 0.5rem;
+  z-index: 999;
+  width: max-content;
+  min-width: 150px;
+}
+
+.collection-list li {
+  line-height: 1.25;
+}
+
+.collection-item {
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  /* padding: 0.25rem; */
+  font-size: 0.95rem;
+  /* line-height: 1; */
+  cursor: pointer;
+  color: #333;
+}
+
+.collection-item:hover {
+  background-color: #f2f2f2;
+}
+
+.collection-item.disabled {
+  color: #aaa;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .recipe-card:hover h4 {
