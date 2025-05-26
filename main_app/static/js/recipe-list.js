@@ -54,8 +54,8 @@ export function initCollectionAddHandlers() {
             bookmarkIcon.classList.add("fa-solid");
           }
         }
-        const recipeTitle = this.dataset.recipeTitle;
-        const collectionName = this.dataset.collectionName;
+        const recipeTitle = JSON.parse(`"${this.dataset.recipeTitle}"`);
+        const collectionName = JSON.parse(`"${this.dataset.collectionName}"`);
         if (recipeTitle && collectionName) {
           showToast(
             `"${recipeTitle}" was added to "${collectionName}"`,
