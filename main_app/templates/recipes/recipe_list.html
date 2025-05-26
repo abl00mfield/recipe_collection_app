@@ -61,14 +61,23 @@
 {% if page_title == "My Recipes" %}
   <form method="get" class="filter-form">
     <div class="form-group">
-    <label for="sort">Sort by:</label>
-    <select name="sort" id="sort" onchange="this.form.submit()">      
-      <option value="title" {% if selected_sort == "title" %}selected{% endif %}>Title A–Z</option>
-      <option value="-title" {% if selected_sort == "-title" %}selected{% endif %}>Title Z–A</option>
-      <option value="-created_at" {% if selected_sort == "-created_at" %}selected{% endif %}>Most Recent</option>
-      <option value="created_at" {% if selected_sort == "created_at" %}selected{% endif %}>Oldest</option>
-    </select>
-  </div>
+      <label for="q">Search: </label>
+      <input type="text" name="q" id="q" placeholder="Search recipes..." value = "{{ search_query }}">
+    </div>
+    <div class="form-group">
+      <label for="sort">Sort by:</label>
+      <select name="sort" id="sort" onchange="this.form.submit()">      
+        <option value="title" {% if selected_sort == "title" %}selected{% endif %}>Title A–Z</option>
+        <option value="-title" {% if selected_sort == "-title" %}selected{% endif %}>Title Z–A</option>
+        <option value="-created_at" {% if selected_sort == "-created_at" %}selected{% endif %}>Most Recent</option>
+        <option value="created_at" {% if selected_sort == "created_at" %}selected{% endif %}>Oldest</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <button class = "btn" type="submit">Search</button>
+      <a href="{% url 'user_recipe_list' %}" class="reset btn">Reset</a>
+    </div>
+
  
   </form>
 {% endif %}

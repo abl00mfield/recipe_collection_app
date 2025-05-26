@@ -137,6 +137,12 @@ class UserRecipeList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_title"] = "My Recipes"
+        context["search_query"] = self.request.GET.get("q", "")
+
+        # Clean the querystring for pagination links (remove page param)
+        querydict = self.request.GET.copy()
+        querydict.pop("page", None)
+        context["querystring"] = querydict.urlencode()
 
         user_collections = (
             Collection.objects.filter(user=self.request.user)
