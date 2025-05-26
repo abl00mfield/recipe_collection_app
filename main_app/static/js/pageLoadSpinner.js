@@ -21,6 +21,8 @@ export function initPageLoadSpinner() {
   const forms = document.querySelectorAll("form");
   forms.forEach((form) => {
     form.addEventListener("submit", () => {
+      if (form.classList.contains("no-spinner")) return;
+
       const message = form.dataset.loadingMessage || "Loading, please wait...";
       overlay.querySelector("p").textContent = message;
       overlay.classList.remove("hidden");

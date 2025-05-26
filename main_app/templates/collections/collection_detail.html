@@ -19,7 +19,7 @@
             method="POST" 
             action="{% url 'collection_remove_recipe' collection.id recipe.id %}"
             class="delete-form"
-            onsubmit="return confirm('Delete this recipe from the collection?');"
+           
         >
         {% csrf_token %}
             <button type="submit" class="delete-icon" title="Delete from Collection" aria-label="Delete from collection">

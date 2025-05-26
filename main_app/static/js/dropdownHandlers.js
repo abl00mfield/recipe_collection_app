@@ -10,6 +10,7 @@ export function initDropdownHandlers() {
       const dropdownToToggle = document.getElementById(`dropdown-${recipeId}`);
 
       // Close all dropdowns
+
       document.querySelectorAll(".collection-dropdown").forEach((dropdown) => {
         if (dropdown !== dropdownToToggle) {
           dropdown.classList.add("hidden");
@@ -17,7 +18,9 @@ export function initDropdownHandlers() {
       });
 
       // Toggle the clicked dropdown
-      dropdownToToggle.classList.toggle("hidden");
+      if (dropdownToToggle) {
+        dropdownToToggle.classList.toggle("hidden");
+      }
     });
   });
 

@@ -88,7 +88,12 @@
         {% for recipe in recipes %}
         <div class="recipe-card" data-href="{% url 'recipe_detail' recipe.id %}"> 
             {% if target_collection %}  
-            <form action="{% url 'collection_add_recipe' recipe.id %} " method="POST">
+            <form action="{% url 'collection_add_recipe' recipe.id %} " 
+                  method="POST" 
+                  class="add-to-collection-form no-spinner"
+                  data-recipe-title="{{ recipe.title|escapejs }}"
+                  data-collection-name="{{ target_collection.name|escapejs }}"
+              >
                 {% csrf_token %}
                 <input type="hidden" value ="{{ target_collection.id }}" name="collection_id">
                 <input type="hidden" name="next" value="{{ request.get_full_path }}">
@@ -124,8 +129,12 @@
                           
                         </li>
                       {% else %}
-                        <li>
-                          <form method="POST" action="{% url 'collection_add_recipe' recipe.id %}">
+                        <li class="collection-item">
+                          <form method="POST" 
+                                action="{% url 'collection_add_recipe' recipe.id %}" 
+                                class="add-to-collection-form no-spinner"
+                                data-recipe-title="{{ recipe.title|escapejs }}"
+                                data-collection-name="{{ collection.name|escapejs }}">
                             {% csrf_token %}
                             <input type="hidden" name="collection_id" value="{{ collection.id }}">
                             <input type="hidden" name="next" value="{{ request.get_full_path }}">
@@ -208,6 +217,8 @@
       </form>
     </div>
   </div>
+
+
 
 {% endblock %}
 
