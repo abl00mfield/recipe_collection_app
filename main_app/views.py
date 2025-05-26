@@ -120,62 +120,19 @@ class RecipeList(ListView):
         return context
 
     def get_queryset(self):
-        queryset = Recipe.objects.all().annotate(
-            avg_rating=Coalesce(Avg("feedbacks__score"), 0.0),
-            num_ratings=Count("feedbacks", filter=Q(feedbacks__score__isnull=False)),
-        )
-
-        # filter by tag
-        tag_name = self.request.GET.get("tag")
-        if tag_name:
-            queryset = queryset.filter(tags__name__iexact=tag_name)
-
-        # filter by search keyword
-        query = self.request.GET.get("q")
-        if query:
-            terms = query.strip().split()
-            q_objects = Q()
-            for term in terms:
-                q_objects &= (
-                    Q(title__icontains=term)
-                    | Q(description__icontains=term)
-                    | Q(tags__name__icontains=term)
-                    | Q(ingredients__icontains=term)
-                )
-            queryset = queryset.filter(q_objects).distinct()
-
-        # sort
-        sort = self.request.GET.get("sort", "-created_at")
-        if sort == "title":
-            queryset = queryset.order_by("title")
-        elif sort == "-title":
-            queryset = queryset.order_by("-title")
-        elif sort == "most_popular":
-            queryset = queryset.order_by("-avg_rating", "-created_at")
-        elif sort == "most_rated":
-            queryset = queryset.order_by("-num_ratings", "-created_at")
-        else:
-            queryset = queryset.order_by("-created_at")
-
-        return queryset
+        return get_filtered_queryset(self.request, Recipe.objects.all())
 
 
 class UserRecipeList(LoginRequiredMixin, ListView):
     model = Recipe
     template_name = "recipes/recipe_list.html"
     context_object_name = "recipes"
-    ordering = ["title"]
     paginate_by = 15
 
     def get_queryset(self):
-        sort = self.request.GET.get("sort", "title")  # default sort
-        queryset = Recipe.objects.filter(author=self.request.user).order_by(sort)
-
-        tag_name = self.request.GET.get("tag")
-        if tag_name:
-            queryset = queryset.filter(tags__name__iexact=tag_name)
-
-        return queryset
+        return get_filtered_queryset(
+            self.request, Recipe.objects.filter(author=self.request.user), "title"
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -334,9 +291,8 @@ def recipe_import(request):
             try:
                 scraper = scrape_me(url)
                 category = safe_scrape("category", scraper)
-                cuisine = safe_scrape("cuisine", scraper)
 
-                generated_tags = clean_scraper_tags(category, cuisine)
+                generated_tags = clean_scraper_tags(category)
 
                 author = safe_scrape("author", scraper)
                 yield_amount = safe_scrape("yields", scraper)
@@ -640,7 +596,7 @@ def create_collection_inline(request):
                     name__iexact=name.title(), user=request.user
                 ).first()
                 messages.info(
-                    request, f"You already have a collection named '{collection.name}'."
+                    request, f'You already have a collection named "{collection.name}".'
                 )
                 return redirect("recipe_list")
 
@@ -711,3 +667,47 @@ def edit_profile(request):
 def profile(request):
     profile, created = UserProfile.objects.get_or_create(user=request.user)
     return render(request, "users/profile.html", {"profile": profile})
+
+
+def get_filtered_queryset(request, base_queryset, initial_sort="-created_at"):
+    queryset = base_queryset.annotate(
+        avg_rating=Coalesce(Avg("feedbacks__score"), 0.0),
+        num_ratings=Count("feedbacks", filter=Q(feedbacks__score__isnull=False)),
+    ).order_by(initial_sort)
+
+    # queryset = queryset.order_by(initial_sort)
+
+    # filter by tag
+    tag_name = request.GET.get("tag")
+    if tag_name:
+        queryset = queryset.filter(tags__name__iexact=tag_name)
+
+        # filter by search keyword
+    query = request.GET.get("q")
+    if query:
+        terms = query.strip().lower().split()
+        q_objects = Q()
+        for term in terms:
+            q_objects &= (
+                Q(title__icontains=term)
+                | Q(tags__name__icontains=term)
+                | Q(ingredients__icontains=term)
+            )
+        queryset = queryset.filter(q_objects).distinct()
+
+    # sort
+    sort = request.GET.get("sort")
+    if sort == "title":
+        queryset = queryset.order_by("title")
+    elif sort == "-title":
+        queryset = queryset.order_by("-title")
+    elif sort == "most_popular":
+        queryset = queryset.order_by("-avg_rating", "-created_at")
+    elif sort == "most_rated":
+        queryset = queryset.order_by("-num_ratings", "-created_at")
+    elif sort == "-created_at":
+        queryset = queryset.order_by("-created_at")
+    elif sort == "created_at":
+        queryset = queryset.order_by("created_at")
+
+    return queryset
