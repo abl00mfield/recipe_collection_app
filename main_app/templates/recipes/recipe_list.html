@@ -123,10 +123,19 @@
                   <ul class="collection-list">
                     {% for collection in user_collections %}
                       {% if recipe in collection.recipes.all %}
-                        <li class="collection-item disabled">
-                          
-                            {{ collection.name }} ☑️
-                          
+                        <li class="collection-item">
+                          <form method="POST"
+                                action="{% url 'collection_remove_recipe' collection.id recipe.id%}"
+                                class = "remove-from-collection-form no-spinner"
+                                data-recipe-title="{{ recipe.title|escapejs }}"
+                                data-collection-name="{{ collection.name|escapejs }}"
+                                data-recipe="{{ recipe.id }}">
+                              {% csrf_token %}
+                              <input type="hidden" name = "next" value = "{{ request.get_full_path}}">
+                              <button type="submit" class="collection-item">
+                                {{ collection.name }} ☑️ (click to remove)
+                              </button>
+                          </form>
                         </li>
                       {% else %}
                         <li class="collection-item">

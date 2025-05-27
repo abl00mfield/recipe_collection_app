@@ -7,6 +7,7 @@ import { initPhotoInputHandlers } from "./photoInputHandlers.js";
 import { initMobileNav } from "./mobileNav.js";
 import { initPageLoadSpinner } from "./pageLoadSpinner.js";
 import { initCollectionAddHandlers } from "./recipe-list.js";
+import { initCollectionRemoveHandlers } from "./recipe-list.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   initLocalTimestamps();
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initMobileNav();
   initPageLoadSpinner();
   initCollectionAddHandlers();
+  initCollectionRemoveHandlers();
   window.addEventListener("pageshow", () => {
     const overlay = document.getElementById("loading-overlay");
     if (overlay) {
