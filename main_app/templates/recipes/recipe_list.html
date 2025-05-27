@@ -88,22 +88,31 @@
         {% for recipe in recipes %}
         <div class="recipe-card" data-href="{% url 'recipe_detail' recipe.id %}"> 
             {% if target_collection %}  
-            <form action="{% url 'collection_add_recipe' recipe.id %} " 
+            <form action="{% if recipe.id in target_collection_recipe_ids %}
+                            {% url 'collection_remove_recipe' target_collection.id recipe.id %} 
+                          {% else %}
+                            {% url 'collection_add_recipe' recipe.id %}
+                          {% endif %}" 
                   method="POST" 
-                  class="add-to-collection-form no-spinner"
+                  class="{% if recipe.id in target_collection_recipe_ids %}
+                          remove-from-collection-form 
+                        {% else %}
+                          add-to-collection-form
+                        {% endif%} no-spinner"
                   data-recipe-title="{{ recipe.title|escapejs }}"
                   data-collection-name="{{ target_collection.name|escapejs }}"
-              >
+                  data-recipe="{{ recipe.id }}"    
+                  data-collection-id="{{ target_collection.id }}"            
+                >
                 {% csrf_token %}
                 <input type="hidden" value ="{{ target_collection.id }}" name="collection_id">
                 <input type="hidden" name="next" value="{{ request.get_full_path }}">
                 <button 
                     class="add-icon plus-mode" 
-                    type="submit"                     
-                    title="Add to {{ target_collection.name }}">
+                    type="submit">        
                     {% if recipe.id in target_collection_recipe_ids %}
-                      <i class="fa-solid fa-check" title="Already in Collection"></i>
-                    {% else %}
+                       <i class="fa-solid fa-check" title="Click to remove from collection"></i>
+                    {% else %}  
                       <i class="fa-solid fa-plus" title="Add to Collection"></i>
                     {% endif %}
                 </button>

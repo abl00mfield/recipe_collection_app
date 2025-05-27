@@ -4,6 +4,8 @@ export function initFormSpinner() {
   const form = document.querySelector("form");
   const overlay = document.getElementById("loading-overlay");
 
+  if (!overlay) return;
+
   if (form && overlay) {
     form.addEventListener("submit", () => {
       const message =

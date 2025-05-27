@@ -17,8 +17,7 @@
         <form 
             method="POST" 
             action="{% url 'collection_delete' collection.id %}"
-            class="delete-form"
-            onsubmit="return confirm('Delete this collection?');"
+            class="delete-form"           
         >
         {% csrf_token %}
             <button type="submit" class="delete-icon" title="Delete Collection" aria-label="Delete Collection">

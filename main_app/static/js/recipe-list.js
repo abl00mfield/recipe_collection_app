@@ -2,6 +2,7 @@ import { showToast } from "./toast.js";
 
 function createCollectionForm({
   mode, // "add" or "remove"
+  displayMode = "icon", // icon or dropdopwn
   recipeId,
   collectionId,
   recipeTitle,
@@ -15,23 +16,32 @@ function createCollectionForm({
   form.dataset.recipe = recipeId;
   form.dataset.recipeTitle = recipeTitle;
   form.dataset.collectionName = collectionName;
+  form.dataset.collectionId = collectionId;
   form.action =
     mode === "add"
       ? `/recipes/${recipeId}/add-to-collection/`
       : `/collections/${collectionId}/remove/${recipeId}`;
 
-  form.innerHTML = `
-    <input type="hidden" name="collection_id" value="${collectionId}">
-    <input type="hidden" name="next" value="${nextUrl}">
-    <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
-    <button type="submit" class="collection-item">
-      ${
-        mode === "add"
-          ? collectionName
-          : `${collectionName} ☑️ (click to remove)`
-      }
-    </button>
-  `;
+  const csrf = `<input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">`;
+  const collectionField = `<input type="hidden" name="collection_id" value="${collectionId}">`;
+  const nextField = `<input type="hidden" name="next" value="${nextUrl}">`;
+
+  let buttonHTML = "";
+
+  if (displayMode === "icon") {
+    buttonHTML = `<button type="submit" class="add-icon plus-mode">
+        <i class="fa-solid ${mode === "add" ? "fa-plus" : "fa-check"}" title="${
+      mode === "add" ? "Add to collection" : "Click to remove"
+    }"></i>
+      </button>`;
+  } else if (displayMode === "dropdown") {
+    buttonHTML = `
+      <button type="submit" class="collection-item">
+        ${collectionName}${mode === "remove" ? " ☑️ (click to remove)" : ""}
+      </button>`;
+  }
+
+  form.innerHTML = `${csrf}${collectionField}${nextField}${buttonHTML}`;
 
   return form;
 }
@@ -70,18 +80,24 @@ export function initCollectionAddHandlers(targetForm = null) {
 
         //CASE A - adding from target collection
         if (!isDropdownForm) {
-          const icon = this.querySelector("button i");
-          if (icon) {
-            icon.classList.remove("fa-plus");
-            icon.classList.add("fa-check");
-            icon.title = "Already in Collection";
-          }
-          const btn = this.querySelector("button");
-          if (btn) btn.disabled = true;
+          const newForm = createCollectionForm({
+            mode: "remove",
+            displayMode: "icon",
+            recipeId,
+            collectionId,
+            recipeTitle: this.dataset.recipeTitle,
+            collectionName: this.dataset.collectionName,
+            csrfToken: formData.get("csrfmiddlewaretoken"),
+            nextUrl,
+          });
+          newForm.classList.add("plus-mode");
+          this.replaceWith(newForm);
+          initCollectionRemoveHandlers(newForm);
           // case B - bookmark dropdown form
         } else {
           const newRemoveForm = createCollectionForm({
             mode: "remove",
+            displayMode: "dropdown",
             recipeId,
             collectionId,
             recipeTitle: this.dataset.recipeTitle,
@@ -134,6 +150,8 @@ export function initCollectionRemoveHandlers(targetForm = null) {
       const collectionName = JSON.parse(`"${this.dataset.collectionName}"`);
       const collectionId = this.action.split("/")[4];
 
+      const isDropdownForm = this.closest(".collection-dropdown") !== null;
+
       const overlay = document.getElementById("loading-overlay");
       let showSpinnerTimeout = setTimeout(() => {
         overlay?.classList.remove("hidden");
@@ -150,19 +168,35 @@ export function initCollectionRemoveHandlers(targetForm = null) {
 
         if (!response.ok) throw new Error("Failed to remove");
 
-        //replace the dropdown item with an active add buttons
-        const newAddForm = createCollectionForm({
-          mode: "add",
-          recipeId,
-          collectionId,
-          recipeTitle: this.dataset.recipeTitle,
-          collectionName: this.dataset.collectionName,
-          csrfToken: formData.get("csrfmiddlewaretoken"),
-          nextUrl: formData.get("next"),
-        });
-        this.replaceWith(newAddForm);
-        initCollectionAddHandlers(newAddForm);
-
+        if (isDropdownForm) {
+          //replace the dropdown item with an active add buttons
+          const newAddForm = createCollectionForm({
+            mode: "add",
+            displayMode: "dropdown",
+            recipeId,
+            collectionId,
+            recipeTitle: this.dataset.recipeTitle,
+            collectionName: this.dataset.collectionName,
+            csrfToken: formData.get("csrfmiddlewaretoken"),
+            nextUrl: formData.get("next"),
+          });
+          this.replaceWith(newAddForm);
+          initCollectionAddHandlers(newAddForm);
+          // replace the plus/check icon in target collection mode
+        } else {
+          const newAddForm = createCollectionForm({
+            mode: "add",
+            displayMode: "icon",
+            recipeId,
+            collectionId,
+            recipeTitle: this.dataset.recipeTitle,
+            collectionName: this.dataset.collectionName,
+            csrfToken: formData.get("csrfmiddlewaretoken"),
+            nextUrl: formData.get("next"),
+          });
+          this.replaceWith(newAddForm);
+          initCollectionAddHandlers(newAddForm);
+        }
         //revert bookmark icon if needed
         const dropdown = document.querySelector(`#dropdown-${recipeId}`);
         const stillSaved = dropdown?.querySelector(
