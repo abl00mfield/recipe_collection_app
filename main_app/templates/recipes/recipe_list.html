@@ -131,7 +131,7 @@
                                 data-collection-name="{{ collection.name|escapejs }}"
                                 data-recipe="{{ recipe.id }}">
                               {% csrf_token %}
-                              <input type="hidden" name = "next" value = "{{ request.get_full_path}}">
+                              <input type="hidden" name = "next" value = "{{ request.get_full_path}}">                              
                               <button type="submit" class="collection-item">
                                 {{ collection.name }} ☑️ (click to remove)
                               </button>
@@ -142,6 +142,7 @@
                           <form method="POST" 
                                 action="{% url 'collection_add_recipe' recipe.id %}" 
                                 class="add-to-collection-form no-spinner"
+                                data-recipe="{{ recipe.id }}"
                                 data-recipe-title="{{ recipe.title|escapejs }}"
                                 data-collection-name="{{ collection.name|escapejs }}">
                             {% csrf_token %}
