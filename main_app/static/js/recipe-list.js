@@ -64,6 +64,11 @@ export function initCollectionAddHandlers(targetForm = null) {
       const nextUrl = formData.get("next");
       const isDropdownForm = this.closest(".collection-dropdown") !== null;
 
+      const overlay = document.getElementById("loading-overlay");
+      let showSpinnerTimeout = setTimeout(() => {
+        overlay?.classList.remove("hidden");
+      }, 150);
+
       const urlParts = this.action.split("/").filter(Boolean); // removes empty strings
       //   const recipeId = urlParts[urlParts.length - 2]; // gets the number before 'add_to_collection'
 
@@ -129,6 +134,9 @@ export function initCollectionAddHandlers(targetForm = null) {
         }
       } catch (err) {
         console.error("Could not add recipe: ", err);
+      } finally {
+        clearTimeout(showSpinnerTimeout);
+        overlay?.classList.add("hidden");
       }
     });
   });
