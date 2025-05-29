@@ -653,6 +653,11 @@ def collection_remove_recipe(request, collection_id, recipe_id):
     next_url = request.POST.get("next")
     if request.method == "POST":
         collection.recipes.remove(recipe)
+
+        if collection.cover_recipe == recipe:
+            collection.cover_recipe = None
+            collection.save(update_fields=["cover_recipe"])
+
         messages.success(request, f'"{recipe.title}" removed from "{collection.name}".')
 
     if next_url:
