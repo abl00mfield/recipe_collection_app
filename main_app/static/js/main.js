@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initPageLoadSpinner();
   initCollectionAddHandlers();
   initCollectionRemoveHandlers();
+
   window.addEventListener("pageshow", () => {
     const overlay = document.getElementById("loading-overlay");
     if (overlay) {

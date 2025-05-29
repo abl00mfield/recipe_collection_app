@@ -1,6 +1,6 @@
 import { showToast } from "./toast.js";
 
-function createCollectionForm({
+export function createCollectionForm({
   mode, // "add" or "remove"
   displayMode = "icon", // icon or dropdopwn
   recipeId,
@@ -68,9 +68,6 @@ export function initCollectionAddHandlers(targetForm = null) {
       let showSpinnerTimeout = setTimeout(() => {
         overlay?.classList.remove("hidden");
       }, 150);
-
-      const urlParts = this.action.split("/").filter(Boolean); // removes empty strings
-      //   const recipeId = urlParts[urlParts.length - 2]; // gets the number before 'add_to_collection'
 
       try {
         const response = await fetch(url, {

@@ -13,6 +13,7 @@ from recipe_scrapers._exceptions import WebsiteNotImplementedError
 import requests
 from cloudinary.uploader import upload as cloudinary_upload
 from .models import normalize_url
+from django.http import JsonResponse
 
 
 from django.views.generic import (
@@ -588,38 +589,59 @@ def collection_add_recipe(request, recipe_id):
 @login_required
 def create_collection_inline(request):
     if request.method == "POST":
-        name = request.POST.get("name")
+        name = request.POST.get("name", "").strip().title()
         recipe_id = request.POST.get("recipe_id")
         collection = None
         next_url = request.POST.get("next")
+        is_ajax = request.headers.get("x-requested-with") == "XMLHttpRequest"
 
-        if name:
-            try:
-                collection = Collection.objects.create(name=name, user=request.user)
-                messages.success(request, f"Collection {name} created!")
-            except IntegrityError:
-                collection = Collection.objects.filter(
-                    name__iexact=name.title(), user=request.user
-                ).first()
-                messages.info(
-                    request, f'You already have a collection named "{collection.name}".'
+        if not name:
+            if is_ajax:
+                return JsonResponse(
+                    {"error": "Collection name is required"}, status=400
                 )
-                return redirect("recipe_list")
-
-            # Add recipe to collection if provided
-            if recipe_id and collection:
-                recipe = get_object_or_404(Recipe, id=recipe_id)
-                if recipe not in collection.recipes.all():
-                    messages.success(request, f"{recipe.title} added!")
-                    collection.recipes.add(recipe)
-
-        else:
             messages.error(request, "Collection name is required")
+            return redirect(next_url or "recipe_list")
 
+        try:
+            collection = Collection.objects.create(name=name, user=request.user)
+
+        except IntegrityError:
+            collection = Collection.objects.filter(
+                name__iexact=name.title(), user=request.user
+            ).first()
+            if is_ajax:
+                return JsonResponse(
+                    {
+                        "error": f'You already have a collection name "{collection.name}"'
+                    },
+                    status=400,
+                )
+            messages.info(
+                request, f'You already have a collection named "{collection.name}".'
+            )
+            return redirect(next_url or "recipe_list")
+
+        # Add recipe to collection if provided
+        if recipe_id and collection:
+            recipe = get_object_or_404(Recipe, id=recipe_id)
+            if recipe not in collection.recipes.all():
+                collection.recipes.add(recipe)
+
+        if is_ajax:
+            return JsonResponse(
+                {
+                    "collectionId": collection.id,
+                    "collectionName": collection.name,
+                    "recipeId": recipe_id,
+                }
+            )
+
+        messages.success(request, f'Collection "{collection.name}" created!')
+        if recipe_id:
+            messages.success(request, f'"{recipe.title}" added to "{collection.name}"!')
         if next_url:
             return redirect(next_url)
-        # if collection:
-        #     return redirect("collection_detail", collection_id=collection.id)
 
     return redirect("recipe_list")
 

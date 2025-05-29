@@ -224,11 +224,11 @@
 
 <div id="new-collection-modal" class="modal-overlay hidden">
     <div class="modal-content">
-      <form method="POST" action="{% url 'collection_create_inline' %}" autocomplete="off">
+      <form method="POST" action="{% url 'collection_create_inline' %}" autocomplete="off" class="new-collection-form no-spinner">
         {% csrf_token %}
         <label for="new-collection-name">New collection name:</label>
         <input type="text" id="new-collection-name" name="name" required autocomplete="off">
-        <input type="hidden" id="new-collection-recipe-id" name="recipe_id">
+        <input type="hidden" id="new-collection-recipe-id" name="recipe_id">        
         <div class="modal-buttons">
           <button type="submit" class="btn">Create</button>
           <button type="button" id="cancel-modal" class="btn cancel-btn">Cancel</button>
