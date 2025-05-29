@@ -13,16 +13,20 @@
 <div class="collection-list">
     {% if collections %}
     {% for collection in collections%}
-    <div class="collection-card" data-href="{% url 'collection_detail' collection.id %}" >
+    <div 
+        class="collection-card" 
+        data-href="{% url 'collection_detail' collection.id %}"        
+        data-id="{{ collection.id }}">
         <form 
             method="POST" 
             action="{% url 'collection_delete' collection.id %}"
-            class="delete-form"           
+            class="delete-form no-spinner"           
         >
         {% csrf_token %}
             <button type="submit" class="delete-icon" title="Delete Collection" aria-label="Delete Collection">
                 <i class="fa-solid fa-trash"></i>
             </button>
+            <input type="hidden" name="collection-name" value="{{collection.name}}">
         </form>
         
         <h3>{{ collection.name }}</h3>

@@ -156,7 +156,7 @@ export function initModalHandlers() {
           }
         }
 
-        // ✅ Add to all other dropdowns
+        // Add to all other dropdowns
         document
           .querySelectorAll(".collection-dropdown")
           .forEach((otherDropdown) => {

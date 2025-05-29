@@ -1,7 +1,7 @@
 //adds a spinner overlay for loading
 
 export function initFormSpinner() {
-  const form = document.querySelector("form");
+  const form = document.querySelector("form:not(.no-spinner)");
   const overlay = document.getElementById("loading-overlay");
 
   if (!overlay) return;

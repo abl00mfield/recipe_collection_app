@@ -8,6 +8,7 @@ import { initMobileNav } from "./mobileNav.js";
 import { initPageLoadSpinner } from "./pageLoadSpinner.js";
 import { initCollectionAddHandlers } from "./recipe-list.js";
 import { initCollectionRemoveHandlers } from "./recipe-list.js";
+import { initCollectionDelete } from "./collectionDelete.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   initLocalTimestamps();
@@ -20,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initPageLoadSpinner();
   initCollectionAddHandlers();
   initCollectionRemoveHandlers();
+  initCollectionDelete();
 
   window.addEventListener("pageshow", () => {
     const overlay = document.getElementById("loading-overlay");
