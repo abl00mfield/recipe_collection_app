@@ -1,10 +1,10 @@
 import { showToast } from "./toast.js";
 
 export function initCollectionDelete() {
-  const container = document.querySelector(".collection-list");
+  const page = document.getElementById("collection-list-page");
 
   //only run this code on the collection list page
-  if (!container) return;
+  if (!page) return;
   const deleteForms = document.querySelectorAll(".delete-form");
 
   deleteForms.forEach((form) => {
