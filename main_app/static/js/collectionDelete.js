@@ -14,7 +14,6 @@ export function initCollectionDelete() {
       const url = this.action;
       const formData = new FormData(this);
       const collectionCard = this.closest(".collection-card");
-      const collectionId = collectionCard?.dataset.id;
       const collectionName = formData.get("collection-name");
 
       if (!confirm(`Are you sure you want to delete "${collectionName}"?`)) {

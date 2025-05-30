@@ -499,6 +499,20 @@ class CollectionDetail(LoginRequiredMixin, DetailView):
     context_object_name = "collection"
     pk_url_kwarg = "collection_id"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        collection = self.object
+        request = self.request
+
+        base_queryset = collection.recipes.all()
+
+        filtered_recipes = get_filtered_queryset(request, base_queryset, "title")
+        context["recipes"] = filtered_recipes
+        context["selected_sort"] = self.request.GET.get("sort", "title")
+        context["search_query"] = self.request.GET.get("q", "")
+
+        return context
+
 
 class CollectionCreate(LoginRequiredMixin, CreateView):
     model = Collection
